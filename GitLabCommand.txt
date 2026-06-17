@@ -1,0 +1,2 @@
+ssh -T git@gitlab.com
+git push -u origin master
