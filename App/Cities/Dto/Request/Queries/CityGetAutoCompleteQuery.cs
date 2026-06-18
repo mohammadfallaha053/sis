@@ -1,4 +1,4 @@
-namespace LapisApi.App.Cities.Dto;
+namespace SisApi.App.Cities.Dto.Request.Queries;
 
 public class CityGetAutoCompleteQuery
 {

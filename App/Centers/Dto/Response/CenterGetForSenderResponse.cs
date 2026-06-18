@@ -1,9 +1,6 @@
-﻿using LapisApi.App.Centers.Enums;
-using LapisApi.App.Regions.Dto;
-using LapisApi.App.Cities.Dto;
-using LapisApi.App.MediaFiles.Dto;
+﻿using LapisApi.App.Cities.Dto;
 using SisApi.App.Regions.Dto;
-namespace LapisApi.App.Centers.Dto.Response;
+namespace SisApi.App.Centers.Dto.Response;
 
 public class CenterGetForClientResponse
 {

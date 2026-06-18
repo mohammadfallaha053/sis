@@ -330,9 +330,7 @@ public class UserService : IUserService
       CreatedAt = user.CreatedAt,
       Role = user.Role.ToString(),
     };
-
-    center.AgentsCount++;
-
+    
     await _unitOfWork.SaveChangesAsync();
 
     return Result<UserResponse>.Success(response);

@@ -1,7 +1,6 @@
 using AutoMapper;
 using LapisApi.App.BackgroundJobs.Dto.Request.Commands;
 using LapisApi.App.BackgroundJobs.Model;
-using LapisApi.Data.Models;
 using SisApi.App.BackgroundJobs.Dto.Response;
 namespace LapisApi.App.BackgroundJobs.Dto.Mapping;
 

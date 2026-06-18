@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LapisApi.Data.Models;
+using SisApi.App.Regions.Model;
 namespace LapisApi.App.Regions.Model
 {
   public class RegionConfiguration : IEntityTypeConfiguration<Region>

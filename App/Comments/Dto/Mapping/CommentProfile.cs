@@ -2,7 +2,6 @@ using AutoMapper;
 using LapisApi.App.Comments.Dto.Request.Commands;
 using LapisApi.App.Comments.Dto.Response;
 using LapisApi.App.Comments.Model;
-using LapisApi.Data.Models;
 namespace LapisApi.App.Comments.Dto.Mapping;
 
 public class CommentProfile : Profile

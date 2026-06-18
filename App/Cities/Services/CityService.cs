@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using JWT53.MyEnum;
-using LinqKit;
-using System.Linq.Expressions;
 using LapisApi.App.Cities.Dto;
-using LapisApi.App.Cities.Dto.Request.Commands;
 using LapisApi.App.Cities.Errors;
-using LapisApi.App.Cities.Model;
 using LapisApi.Data.Interfaces;
-using LapisApi.Data.Models;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LapisApi.Interfaces.Cities;
 using LapisApi.MyEnum.RegionSort;
-namespace LapisApi.Services.Cities;
+using LinqKit;
+using SisApi.App.Cities.Dto.Request.Commands;
+using SisApi.App.Cities.Dto.Request.Queries;
+using SisApi.App.Cities.Model;
+using System.Linq.Expressions;
+namespace SisApi.App.Cities.Services;
 
 public class CityService : ICityService
 {
@@ -48,12 +47,7 @@ public class CityService : ICityService
     {
       predicate = predicate.And(c => c.IsActive == query.IsActive);
     }
-
-    if (query.IsAutomaticAcceptance != null)
-    {
-      predicate = predicate.And(c => c.IsAutomaticAcceptance == query.IsAutomaticAcceptance);
-    }
-
+    
     var sortFunc = SortHelper.BuildSort<City, CitySortField>(query.Sort);
 
     var pagedResult =

@@ -1,5 +1,6 @@
 ﻿using LapisApi.App.Cities.Dto;
-using LapisApi.App.Cities.Dto.Request.Commands;
+using SisApi.App.Cities.Dto.Request.Commands;
+using SisApi.App.Cities.Dto.Request.Queries;
 namespace LapisApi.Interfaces.Cities;
 
 public interface ICityService

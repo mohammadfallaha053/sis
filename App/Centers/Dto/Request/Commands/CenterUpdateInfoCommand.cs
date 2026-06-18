@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace LapisApi.App.Centers.Dto.Request.Commands;
+namespace SisApi.App.Centers.Dto.Request.Commands;
 
 public class CenterUpdateInfoCommand
 {

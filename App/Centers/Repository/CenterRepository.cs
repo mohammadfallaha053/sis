@@ -1,7 +1,7 @@
 ﻿using GenericRepository.Repositories;
 using LapisApi.App.Centers.Interfaces;
-using LapisApi.App.Centers.Model;
 using LapisApi.Data;
+using SisApi.App.Centers.Model;
 namespace LapisApi.App.Centers.Repository;
 
 public class CenterRepository : GenericRepository<Center>, ICenterRepository

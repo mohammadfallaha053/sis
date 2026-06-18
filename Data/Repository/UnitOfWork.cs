@@ -13,6 +13,7 @@ using LapisApi.App.Users.Model;
 using LapisApi.Data;
 using LapisApi.Data.Interfaces;
 using LapisApi.Interfaces.Cities;
+using SisApi.App.Cities.Repository;
 namespace LapisApi.Repository.Generic;
 
 public class UnitOfWork : IUnitOfWork

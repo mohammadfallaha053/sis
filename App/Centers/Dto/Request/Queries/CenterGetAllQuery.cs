@@ -1,14 +1,10 @@
 using LapisApi.App.Centers.Enums;
-namespace LapisApi.App.Centers.Dto;
+namespace SisApi.App.Centers.Dto.Request.Queries;
 
 public class CenterGetAllQuery
 {
   public string? Search { get; set; }
-
   public bool? IsActive { get; set; }
-
-  public bool? IsCanAccept { get; set; }
-
   public int? RegionId { get; set; }
   
   public int? CityId { get; set; }

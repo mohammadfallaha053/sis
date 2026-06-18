@@ -1,5 +1,5 @@
 using LapisApi.MyEnum.RegionSort;
-namespace LapisApi.App.Cities.Dto;
+namespace SisApi.App.Cities.Dto.Request.Queries;
 
 public class CityGetAllQuery
 {
@@ -8,5 +8,4 @@ public class CityGetAllQuery
   public int PageSize { get; set; } = 10;
   public SortRequest<CitySortField>? Sort { get; set;}
   public bool? IsActive  { get; set; }
-  public bool? IsAutomaticAcceptance { get; set; }
 }

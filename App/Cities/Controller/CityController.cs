@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using LapisApi.App.Auth.Enums;
+﻿using LapisApi.App.Auth.Enums;
 using LapisApi.App.Cities.Dto;
-using LapisApi.App.Cities.Dto.Request.Commands;
 using LapisApi.Filter;
 using LapisApi.Interfaces.Cities;
-namespace LapisApi.App.Cities.Controller;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SisApi.App.Cities.Dto.Request.Commands;
+using SisApi.App.Cities.Dto.Request.Queries;
+namespace SisApi.App.Cities.Controller;
 
 [Authorize]
 [ApiController]

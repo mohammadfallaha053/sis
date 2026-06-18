@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-namespace LapisApi.App.Centers.Model
+namespace SisApi.App.Centers.Model
 {
   public class CenterConfiguration : IEntityTypeConfiguration<Center>
   {
@@ -10,6 +10,10 @@ namespace LapisApi.App.Centers.Model
         .WithMany(cn => cn.Centers)
         .HasForeignKey(c => c.RegionId)
         .OnDelete(DeleteBehavior.Restrict);
+      
+      builder.HasOne(c => c.Manager)
+        .WithOne()
+        .HasForeignKey<Center>(c => c.ManagerId);
     }
   }
 }

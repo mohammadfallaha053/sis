@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LapisApi.App.Centers.Model;
-using LapisApi.App.Cities.Model;
 using LapisApi.App.MediaFiles.Model;
 using LapisApi.App.Settings.Model;
 using LapisApi.App.Users.Model;
-using LapisApi.Data.Models;
+using SisApi.App.Centers.Model;
+using SisApi.App.Cities.Model;
+using SisApi.App.Regions.Model;
 
 namespace LapisApi.Data
 {

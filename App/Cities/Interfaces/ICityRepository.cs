@@ -1,6 +1,5 @@
 ﻿using GenericRepository.Interfaces;
-using LapisApi.App.Cities.Model;
-using LapisApi.Data.Models;
+using SisApi.App.Cities.Model;
 namespace LapisApi.Interfaces.Cities
 {
   public interface ICityRepository : IGenericRepository<City>

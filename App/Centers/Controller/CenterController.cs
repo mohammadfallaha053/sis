@@ -6,6 +6,8 @@ using LapisApi.App.Centers.Interfaces;
 using LapisApi.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SisApi.App.Centers.Dto.Request.Commands;
+using SisApi.App.Centers.Dto.Request.Queries;
 namespace SisApi.App.Centers.Controller;
 
 [ApiController]
@@ -54,11 +56,11 @@ public class CenterController : ControllerBase
     return result.ToActionResult(this);
   }
 
-  [Authorize(Roles = nameof(RoleEnum.Client))]
-  [HttpPut("update-center-info")]
-  public async Task<IActionResult> UpdateCenterInfo([FromBody] CenterUpdateInfoCommand command)
+  [Authorize(Roles = nameof(RoleEnum.Admin))]
+  [HttpPut("update-center-info/{id}")]
+  public async Task<IActionResult> UpdateCenterInfo(string id,[FromBody] CenterUpdateInfoCommand command)
   {
-    var result = await _centerService.UpdateCenterInfoAsync(command);
+    var result = await _centerService.UpdateCenterInfoAsync(id,command);
     return result.ToActionResult(this);
   }
 

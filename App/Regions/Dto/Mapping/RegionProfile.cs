@@ -1,6 +1,6 @@
 using AutoMapper;
 using LapisApi.App.Regions.Dto;
-using LapisApi.Data.Models;
+using SisApi.App.Regions.Model;
 namespace SisApi.App.Regions.Dto.Mapping;
 
 public class RegionProfile : Profile

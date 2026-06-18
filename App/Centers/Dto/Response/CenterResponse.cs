@@ -11,20 +11,18 @@ public class CenterResponse
   public string NameAr { get; set; }
   public string NameEn { get; set; }
   public string Phone { get; set; }
+  
   public string Email { get; set; }
+  
   public string LocationAr { get; set; }
   public string LocationEn { get; set; }
   public double Lat { get; set; }
   public double Long { get; set; }
-  public int AgentsCount { get; set; }
+  
   public bool IsActive { get; set; }
-  public bool IsCanAccept { get; set; }
+  
   public RegionBaseResponse? Region { get; set; }
-  public decimal CommissionRate { get; set; }
   public CityBaseResponse? City { get; set; }
-
-  public decimal? LastTemporaryPaymentAmount { get; set; }
-  public TemporaryPaymentStatusEnum LastTemporaryPaymentStatus { get; set; }
-  public string? TemporaryPaymentNotes { get; set; }
+  
   public FileResponse? Image { get; set; }
 }

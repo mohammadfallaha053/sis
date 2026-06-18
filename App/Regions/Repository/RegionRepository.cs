@@ -3,7 +3,7 @@ using GenericRepository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using LapisApi.App.Regions.Interfaces;
 using LapisApi.Data;
-using LapisApi.Data.Models;
+using SisApi.App.Regions.Model;
 namespace LapisApi.Repository;
 
 public class RegionRepository : GenericRepository<Region>, IRegionRepository

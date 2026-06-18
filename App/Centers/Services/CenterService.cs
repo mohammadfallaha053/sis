@@ -6,12 +6,10 @@ using System.Text.RegularExpressions;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.Centers.Dto;
 using LapisApi.App.Centers.Dto.Request.Commands;
-using LapisApi.App.Centers.Dto.Request.Queries;
 using LapisApi.App.Centers.Dto.Response;
 using LapisApi.App.Centers.Enums;
 using LapisApi.App.Centers.Errors;
 using LapisApi.App.Centers.Interfaces;
-using LapisApi.App.Centers.Model;
 using LapisApi.App.Regions.Errors;
 using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.MediaFiles.Interfaces;
@@ -20,6 +18,10 @@ using LapisApi.App.Users.Interfaces;
 using LapisApi.Data.Interfaces;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
+using SisApi.App.Centers.Dto.Request.Commands;
+using SisApi.App.Centers.Dto.Request.Queries;
+using SisApi.App.Centers.Dto.Response;
+using SisApi.App.Centers.Model;
 namespace LapisApi.App.Centers.Services;
 
 public class CenterService : ICenterService
@@ -68,22 +70,7 @@ public class CenterService : ICenterService
 
     var center = _mapper.Map<Center>(command);
     await _unitOfWork.Centers.AddAsync(center);
-
-    var emailName = Regex.Replace(center.NameEn, @"[^a-zA-Z0-9]", "").ToLower();
-
-    var Agent =
-      new CreateAgentRequest()
-      {
-        Email = emailName + "@PrimaryAgent",
-        CenterId = center.Id,
-      };
-
-    var result = await _userService.InsertAgentAsync(Agent);
-
-    if (!result.IsSuccess)
-    {
-      return Result<CenterResponse>.Failure(result.Error);
-    }
+    
 
     await _unitOfWork.SaveChangesAsync();
 
@@ -107,12 +94,7 @@ public class CenterService : ICenterService
     {
       predicate = predicate.And(c => c.IsActive == query.IsActive);
     }
-
-    if (query.IsCanAccept != null)
-    {
-      predicate = predicate.And(c => c.IsCanAccept == query.IsCanAccept);
-    }
-
+    
     if (query.RegionId != null)
     {
       predicate = predicate.And(c => c.RegionId == query.RegionId);
@@ -134,8 +116,10 @@ public class CenterService : ICenterService
       q => q
         .Include(c => c.Region)
         .ThenInclude(Region => Region.City)
+        .Include(c => c.Manager)
     );
-
+    
+    
     var data = _mapper.Map<IEnumerable<CenterResponse>>(pagedResult.Data);
 
     var paging = new AppPaging
@@ -204,7 +188,7 @@ public class CenterService : ICenterService
 
     var mediaFiles = await _fileService.GetFilesByEntityAsync(
       entityId: id,
-      entityType: AttachmentEntityType.User
+      entityType: AttachmentEntityType.Center
     );
 
     var data = _mapper.Map<CenterResponse>(center);
@@ -261,15 +245,9 @@ public class CenterService : ICenterService
     return Result<CenterResponse>.Success(_mapper.Map<CenterResponse>(center));
   }
 
-  public async Task<Result<CenterResponse>> UpdateCenterInfoAsync(CenterUpdateInfoCommand command)
+  public async Task<Result<CenterResponse>> UpdateCenterInfoAsync(string id,CenterUpdateInfoCommand command)
   {
-    var centerId = _claimService.GetCenterId();
-    if (centerId == null)
-    {
-      return Result<CenterResponse>.Failure(CenterErrors.NotFound);
-    }
-
-    var center = await _unitOfWork.Centers.GetByIdAsync(centerId);
+    var center = await _unitOfWork.Centers.GetByIdAsync(id);
     if (center == null)
     {
       return Result<CenterResponse>.Failure(CenterErrors.NotFound);

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using LapisApi.App.Auth.Dto;
 using LapisApi.App.Auth.Enums;
-using LapisApi.App.Centers.Dto.Request.Queries;
 using LapisApi.App.Centers.Interfaces;
 using LapisApi.App.Regions.Dto;
 using LapisApi.App.Regions.Interfaces;

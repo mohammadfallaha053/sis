@@ -1,5 +1,4 @@
 ﻿using LapisApi.App.Users.Model;
-using LapisApi.Data.Models;
 namespace LapisApi.App.Comments.Model
 {
   public class Comment

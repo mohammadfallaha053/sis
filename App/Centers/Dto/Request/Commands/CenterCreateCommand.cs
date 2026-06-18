@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace LapisApi.App.Centers.Dto;
+namespace SisApi.App.Centers.Dto.Request.Commands;
 
 public class CenterCreateCommand
 {
@@ -26,11 +26,6 @@ public class CenterCreateCommand
 
   [Required]
   public bool IsActive { get; set; }
-
-  [Required]
-  public bool IsCanAccept { get; set; }
-
-  [Range(0, 1, ErrorMessage = "Commission must be between 0 and 1")]
-  [Required]
-  public decimal CommissionRate { get; set; }
+  
+  public string? ManagerId { get; set; }
 }

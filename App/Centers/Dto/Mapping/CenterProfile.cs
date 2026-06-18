@@ -1,9 +1,11 @@
 using AutoMapper;
+using LapisApi.App.Centers.Dto;
 using LapisApi.App.Centers.Dto.Request.Commands;
 using LapisApi.App.Centers.Dto.Response;
-using LapisApi.App.Centers.Model;
-using LapisApi.Data.Models;
-namespace LapisApi.App.Centers.Dto.Mapping;
+using SisApi.App.Centers.Dto.Request.Commands;
+using SisApi.App.Centers.Dto.Response;
+using SisApi.App.Centers.Model;
+namespace SisApi.App.Centers.Dto.Mapping;
 
 public class CenterProfile : Profile
 {
@@ -15,15 +17,10 @@ public class CenterProfile : Profile
 
     CreateMap<Center, CenterBaseResponse>();
 
-    CreateMap<Center, CenterResponse>()
-      .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Region.City))
-      .ForMember(dest => dest.CommissionRate, opt => opt.MapFrom(src => src.CommissionRate * 100));
-
+    CreateMap<Center, CenterResponse>();
     CreateMap<Center, CenterGetForClientResponse>()
       .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Region.City));
 
-    CreateMap<Center, CenterInfoResponse>()
-      .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Region.City))
-      .ForMember(dest => dest.CommissionRate, opt => opt.MapFrom(src => src.CommissionRate * 100));
+    CreateMap<Center, CenterInfoResponse>();
   }
 }

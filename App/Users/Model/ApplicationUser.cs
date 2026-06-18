@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using LapisApi.App.Auth.Enums;
-using LapisApi.App.Centers.Model;
+using SisApi.App.Centers.Model;
 namespace LapisApi.App.Users.Model
 {
   public class ApplicationUser : IdentityUser

@@ -1,11 +1,8 @@
-﻿using GenericRepository.Interfaces;
-using GenericRepository.Repositories;
-using Microsoft.EntityFrameworkCore;
-using LapisApi.App.Cities.Model;
+﻿using GenericRepository.Repositories;
 using LapisApi.Data;
-using LapisApi.Data.Models;
 using LapisApi.Interfaces.Cities;
-namespace LapisApi.Repository;
+using SisApi.App.Cities.Model;
+namespace SisApi.App.Cities.Repository;
 
 public class CityRepository : GenericRepository<City>, ICityRepository
 {

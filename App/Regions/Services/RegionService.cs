@@ -9,13 +9,13 @@ using LapisApi.App.Regions.Enums;
 using LapisApi.App.Regions.Errors;
 using LapisApi.App.Regions.Interfaces;
 using LapisApi.Data.Interfaces;
-using LapisApi.Data.Models;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LapisApi.MyEnum.RegionSort;
 using SisApi.App.Regions.Dto;
 using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Interfaces;
+using SisApi.App.Regions.Model;
 
 namespace LapisApi.Services.Regions;
 

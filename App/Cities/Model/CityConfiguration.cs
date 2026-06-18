@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LapisApi.Data.Models;
-
-namespace LapisApi.App.Cities.Model
+namespace SisApi.App.Cities.Model
 {
   public class CityConfiguration : IEntityTypeConfiguration<City>
   {

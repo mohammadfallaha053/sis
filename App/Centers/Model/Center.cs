@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using LapisApi.App.Centers.Enums;
-using LapisApi.App.Users.Model;
-using LapisApi.Data.Models;
-namespace LapisApi.App.Centers.Model
+﻿using LapisApi.App.Users.Model;
+using SisApi.App.Regions.Model;
+using System.ComponentModel.DataAnnotations;
+namespace SisApi.App.Centers.Model
 {
   public class Center
   {
@@ -20,19 +19,10 @@ namespace LapisApi.App.Centers.Model
     public required double Lat { get; set; }
     public required double Long { get; set; }
     public required bool IsActive { get; set; }
-    public required bool IsCanAccept { get; set; }
-
-    public string? TemporaryPaymentNotes { get; set; }
-    public decimal? LastTemporaryPaymentAmount { get; set; } = null;
-
-    public TemporaryPaymentStatusEnum LastTemporaryPaymentStatus { get; set; } = TemporaryPaymentStatusEnum.Accepted;
-
-    [Range(0, 1)]
-    public decimal CommissionRate { get; set; } = 0;
-
-    public required int AgentsCount { get; set; } = 0;
     public int RegionId { get; set; }
     public Region Region { get; set; }
-    public ICollection<ApplicationUser> Agents { get; set; } = new List<ApplicationUser>();
+    
+    public  string ManagerId { get; set; }
+    public  ApplicationUser Manager { get; set; }
   }
 }

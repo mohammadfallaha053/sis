@@ -1,4 +1,4 @@
-namespace LapisApi.App.Centers.Dto.Request.Queries;
+namespace SisApi.App.Centers.Dto.Request.Queries;
 
 public class CenterGetForClientQuery
 {
