@@ -1,4 +1,4 @@
-﻿using LapisApi.App.Users.Dto.Response;
+﻿using SisApi.App.Users.Dto.Response;
 namespace LapisApi.App.Comments.Dto.Response;
 
 public class CommentSliderResponse

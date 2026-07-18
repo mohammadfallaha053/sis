@@ -1,13 +1,14 @@
 ﻿using LapisApi.App.Users.Dto;
 using LapisApi.App.Users.Dto.Request.Commands;
 using LapisApi.App.Users.Dto.Request.Queries;
-using LapisApi.App.Users.Dto.Response;
-namespace LapisApi.App.Users.Interfaces;
+using SisApi.App.Users.Dto.Request.Commands;
+using SisApi.App.Users.Dto.Response;
+namespace SisApi.App.Users.Interfaces;
 
 public interface IUserService
 {
   Task<Result<IEnumerable<UserResponse>>> GetAllUsersAsync(UserGetAllQuery getAllQuery);
-  Task<Result<UserResponse>> InsertAgentAsync(CreateAgentRequest request);
+  Task<Result<UserResponse>> InsertUserAsync(CreateUserRequest request);
   Task<Result<object>> UpdateUserAsync(UpdateUserRequest request);
   Task<Result<object>> DisableUserAsync(DisableAgentRequest request);
   Task<Result<object>> AddContactUsAsync(ContactUsCommand request);

@@ -4,10 +4,10 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using LapisApi.App.Auth.Enums;
 using LapisApi.App.Users.Dto.Request.Commands;
-using LapisApi.App.Users.Model;
 using LapisApi.Helpers;
 using LapisApi.OptionConfigurations;
 using LapisApi.Shared.EmailTemplates;
+using SisApi.App.Users.Model;
 namespace LapisApi.Shared.Services;
 
 public class EmailService : IEmailService

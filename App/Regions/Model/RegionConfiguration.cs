@@ -1,17 +1,19 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SisApi.App.Regions.Model;
-namespace LapisApi.App.Regions.Model
+namespace SisApi.App.Regions.Model
 {
   public class RegionConfiguration : IEntityTypeConfiguration<Region>
   {
     public void Configure(EntityTypeBuilder<Region> builder)
     {
-      builder.HasOne(c => c.City)
-        .WithMany(cn => cn.Regions)
-        .HasForeignKey(c => c.CityId)
-        .OnDelete(DeleteBehavior.Restrict);
+      builder
+        .OwnsMany(
+          region => region.Visits,
+          visitsBuilder =>
+          {
+            visitsBuilder.ToJson();
+          }
+        );
     }
   }
 }

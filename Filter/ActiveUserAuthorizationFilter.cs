@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using LapisApi.App.Auth.Errors;
 using LapisApi.Helpers.Responses;
-using LapisApi.App.Users.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LapisApi.App.Auth.Enums;
 using LapisApi.App.Users.Errors;
 using LapisApi.Helpers;
+using SisApi.App.Users.Model;
 
 namespace LapisApi.Filter;
 

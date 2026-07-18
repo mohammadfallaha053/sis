@@ -1,5 +1,5 @@
 using LapisApi.App.MediaFiles.Dto;
-namespace LapisApi.App.Users.Dto.Response;
+namespace SisApi.App.Users.Dto.Response;
 
 public class UserResponse
 {
@@ -10,10 +10,11 @@ public class UserResponse
   public string PhoneNumber { get; set; } = default!;
   public string Role { get; set; } = default!;
   
+  public int? CenterId { get; set; }
+  
   public bool IsActive { get; set; }
   public DateTime CreatedAt { get; set; }
 
   public FileResponse? Image { get; set; }
-  
   
 }

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace LapisApi.Dto.Auth;
+namespace SisApi.App.Auth.Dto;
 
 public class ResetPasswordRequest
 {

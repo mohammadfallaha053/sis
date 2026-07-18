@@ -26,8 +26,7 @@ namespace GenericRepository.Interfaces
       Func<IQueryable<T>, IQueryable<T>>? queryBuilder = null
     );
 
-    Task AddAsync(T entity);
-
+    Task<T> AddAsync(T entity);
     Task UpdateAsync(T entity);
 
     Task RemoveAsync(T entity);

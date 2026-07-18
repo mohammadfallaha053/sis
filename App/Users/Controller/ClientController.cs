@@ -1,21 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LapisApi.App.Settings.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using LapisApi.App.Auth.Dto;
-using LapisApi.App.Auth.Enums;
-using LapisApi.App.Centers.Interfaces;
-using LapisApi.App.Regions.Dto;
-using LapisApi.App.Regions.Interfaces;
-using LapisApi.App.Comments.Dto.Request.Commands;
-using LapisApi.App.Comments.Interfaces;
-using LapisApi.App.Cities.Dto;
-using LapisApi.App.Settings.Interfaces;
-using LapisApi.Filter;
-using LapisApi.Interfaces.Auth;
-using LapisApi.Interfaces.Cities;
-using SisApi.App.Regions.Interfaces;
-namespace LapisApi.App.Users.Controller
+namespace SisApi.App.Users.Controller
 {
-
   [Route("api/[controller]")]
   [ApiController]
   public class ClientController : ControllerBase
@@ -23,12 +9,7 @@ namespace LapisApi.App.Users.Controller
     private readonly ISettingService _settingService;
     
     public ClientController(
-      IAuthService authService,
-      ICommentService commentService,
-      ISettingService settingService,
-      ICenterService centerService,
-      IRegionService RegionService,
-      ICityService CityService
+      ISettingService settingService
     )
     {
       _settingService = settingService;

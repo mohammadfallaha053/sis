@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace LapisApi.App.Users.Dto;
+namespace SisApi.App.Users.Dto.Request.Commands;
 
 public class DisableAgentRequest
 {
   [Required]
-  public string Email { get; set; } = string.Empty;
+  public string UserId { get; set; } = string.Empty;
 }

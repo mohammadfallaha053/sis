@@ -1,4 +1,4 @@
-﻿namespace LapisApi.App.Settings.Model
+﻿namespace SisApi.App.Settings.Model
 {
   public class Setting
   {

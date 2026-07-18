@@ -81,4 +81,25 @@ public static class UserErrors
     messageEn: "The account has been disabled by the administration for security reasons.",
     type: ErrorType.Unauthorized
   );
+  
+  public static readonly Error InactiveUser = new(
+    code: "Users.InactiveUser",
+    messageAr: "حساب المستخدم غير فعال",
+    messageEn: "The user account is inactive",
+    type: ErrorType.Validation
+  );
+
+  public static readonly Error NotAllowedToCreateUsers = new(
+    code: "Users.NotAllowedToCreateUsers",
+    messageAr: "ليس لديك صلاحية إنشاء مستخدمين",
+    messageEn: "You are not allowed to create users",
+    type: ErrorType.Unauthorized
+  );
+
+  public static readonly Error AddRoleFailed = new(
+    code: "Users.AddRoleFailed",
+    messageAr: "تم إنشاء المستخدم، ولكن فشلت عملية إسناد الدور إليه",
+    messageEn: "The user was created, but assigning the role failed",
+    type: ErrorType.Validation
+  );
 }

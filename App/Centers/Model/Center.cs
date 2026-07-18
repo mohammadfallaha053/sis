@@ -1,28 +1,21 @@
-﻿using LapisApi.App.Users.Model;
-using SisApi.App.Regions.Model;
-using System.ComponentModel.DataAnnotations;
+﻿using SisApi.App.Users.Model;
+using System.Drawing;
 namespace SisApi.App.Centers.Model
 {
   public class Center
   {
-    [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
-    public required string NameAr { get; set; }
-    public required string NameEn { get; set; }
-    public required string Phone { get; set; } = string.Empty;
-
-    public required string Email { get; set; } = string.Empty;
-
-    public required string LocationAr { get; set; }
-    public required string LocationEn { get; set; }
-    public required double Lat { get; set; }
-    public required double Long { get; set; }
-    public required bool IsActive { get; set; }
-    public int RegionId { get; set; }
-    public Region Region { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Phone { get; set; }
+    public string Location { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsActive { get; set; } = true;
     
-    public  string ManagerId { get; set; }
-    public  ApplicationUser Manager { get; set; }
+    public string? ManagerId { get; set; }
+    public ApplicationUser? Manager { get; set; }
+    
+    // جميع العاملين التابعين للمركز
+    public ICollection<ApplicationUser> Employees { get; set; }
+      = new List<ApplicationUser>();
   }
 }

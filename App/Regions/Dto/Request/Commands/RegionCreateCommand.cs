@@ -1,17 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace SisApi.App.Regions.Dto;
+﻿using SisApi.Shared.Infos;
+using System.ComponentModel.DataAnnotations;
+namespace SisApi.App.Regions.Dto.Request.Commands;
 
 public class RegionCreateCommand
 {
   [Required]
-  public required string NameAr { get; set; }
+  public required string Name { get; set; }
+  
+  public double Lat { get; set; }
+  public double Long { get; set; }
 
+  public List<VisitInfo> Visits { get; set; } = [];
+  
   [Required]
-  public required string NameEn { get; set; }
-
-  [Required]
-  public bool IsActive { get; set; }
-
-  [Required]
-  public required int CityId { get; set; }
+  public required int CenterId { get; set; }
 }

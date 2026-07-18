@@ -1,34 +1,32 @@
 ﻿using AutoMapper;
-using LinqKit;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using LapisApi.App.Auth.Enums;
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.BackgroundJobs.Enums;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.BackgroundJobs.Jobs.Payloads;
-using LapisApi.App.Centers.Errors;
-using LapisApi.App.MediaFiles.Dto;
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
 using LapisApi.App.Users.Dto;
 using LapisApi.App.Users.Dto.Request.Commands;
 using LapisApi.App.Users.Dto.Request.Queries;
-using LapisApi.App.Users.Dto.Response;
 using LapisApi.App.Users.Enums;
 using LapisApi.App.Users.Errors;
-using LapisApi.App.Users.Interfaces;
-using LapisApi.App.Users.Model;
-using LapisApi.Data;
-using LapisApi.Data.Interfaces;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
-using LapisApi.Interfaces.Auth;
 using LapisApi.Shared.Errors;
-using LapisApi.Shared.Services;
-namespace LapisApi.App.Users.Services;
+using LinqKit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SisApi.App.Auth.Enums;
+using SisApi.App.Centers.Errors;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.App.Users.Dto.Request.Commands;
+using SisApi.App.Users.Dto.Response;
+using SisApi.App.Users.Interfaces;
+using SisApi.App.Users.Model;
+using SisApi.Data;
+using SisApi.Data.Interfaces;
+using System.Linq.Expressions;
+namespace SisApi.App.Users.Services;
 
 public class UserService : IUserService
 {
@@ -75,14 +73,20 @@ public class UserService : IUserService
       user.Email.Contains(getAllQuery.Search);
 
     predicate = predicate.And(user => user.Role != RoleEnum.Admin);
-
-
+    
+    var isAdmin = await _claimService.IsAdminAsync();
+    if (!isAdmin)
+    {
+      var curentUserId = _claimService.GetUserId();
+      var currentUser = await _userManager.FindByIdAsync(curentUserId);
+      predicate = predicate.And(user => user.CenterId == currentUser.CenterId);
+      predicate = predicate.And(user => user.Role == RoleEnum.Employee);
+    }
+    
     if (getAllQuery.IsActive != null)
     {
       predicate = predicate.And(user => user.IsActive == getAllQuery.IsActive);
     }
-
-    
 
 
     var sortFunc = SortHelper.BuildSort<ApplicationUser, UserSortField>(getAllQuery.Sort);
@@ -92,7 +96,6 @@ public class UserService : IUserService
       pageNumber: getAllQuery.PageNumber,
       pageSize: getAllQuery.PageSize,
       sort: sortFunc
-      // queryBuilder: o => o.Include(o => o.MediaFiles)
     );
 
     var result =
@@ -169,12 +172,8 @@ public class UserService : IUserService
 
   public async Task<Result<object>> DisableUserAsync(DisableAgentRequest request)
   {
-    var isAdmin = await _claimService.IsAdminAsync();
-    if (!isAdmin)
-      return Result<object>.Failure(AuthErrors.Unauthorized);
-
     var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(
-      predicate: u => u.Email == request.Email
+      predicate: u => u.Id == request.UserId
     );
     // تعديل بيانات المستخدم
     user.IsActive = user.IsActive ? false : true;
@@ -274,53 +273,187 @@ public class UserService : IUserService
 
     return Result<object>.Success(null);
   }
+  
+public async Task<Result<UserResponse>> InsertUserAsync(
+  CreateUserRequest request
+)
+{
+  var existingUser =
+    await _userManager.FindByEmailAsync(request.Email);
 
-
-  public async Task<Result<UserResponse>> InsertAgentAsync(CreateAgentRequest request)
+  if (existingUser is not null)
   {
-    var existingUser = await _userManager.FindByEmailAsync(request.Email);
-    if (existingUser != null)
+    return Result<UserResponse>.Failure(
+      UserErrors.EmailAlreadyUsed
+    );
+  }
+
+  var currentUserId = _claimService.GetUserId();
+
+  var currentUser =
+    await _userManager.FindByIdAsync(currentUserId);
+
+  if (currentUser is null)
+  {
+    return Result<UserResponse>.Failure(
+      UserErrors.NotFound
+    );
+  }
+
+  if (!currentUser.IsActive)
+  {
+    return Result<UserResponse>.Failure(
+      UserErrors.InactiveUser
+    );
+  }
+
+  var isAdmin =
+    await _userManager.IsInRoleAsync(
+      currentUser,
+      RoleEnum.Admin.ToString()
+    );
+
+  var isManager =
+    await _userManager.IsInRoleAsync(
+      currentUser,
+      RoleEnum.Manager.ToString()
+    );
+
+  /*
+   * حماية إضافية داخل الخدمة.
+   * لا نعتمد فقط على Authorize الموجود في Controller.
+   */
+  if (!isAdmin && !isManager)
+  {
+    return Result<UserResponse>.Failure(
+      UserErrors.NotAllowedToCreateUsers
+    );
+  }
+
+  RoleEnum newUserRole;
+  int? centerId;
+
+  if (isAdmin)
+  {
+    /*
+     * الأدمن ينشئ مديرًا.
+     * يسمح بإنشاء المدير دون مركز،
+     * ثم يتم تعيينه لمركز لاحقًا.
+     */
+    newUserRole = RoleEnum.Manager;
+    centerId = null;
+  }
+  else
+  {
+    /*
+     * المدير ينشئ موظفًا حصراً.
+     */
+    newUserRole = RoleEnum.Employee;
+
+    /*
+     * لا نسمح للمدير بإنشاء موظف
+     * إن لم يكن مرتبطًا بمركز.
+     */
+    if (!currentUser.CenterId.HasValue)
     {
-      return
-        Result<UserResponse>.Failure(UserErrors.EmailAlreadyUsed);
+      return Result<UserResponse>.Failure(
+        CentersErrors.NoCenterForThisManagerYet
+      );
     }
 
-    var center = await _unitOfWork.Centers.GetByIdAsync(request.CenterId);
-    if (center == null)
+    var center =
+      await _unitOfWork.Centers.GetFirstOrDefaultAsync(
+        item => item.Id == currentUser.CenterId.Value
+      );
+
+    if (center is null)
     {
-      return
-        Result<UserResponse>.Failure(CenterErrors.NotFound);
+      return Result<UserResponse>.Failure(
+        CentersErrors.NotFound
+      );
     }
 
+    /*
+     * لا يكفي أن يكون المستخدم تابعًا للمركز؛
+     * يجب أن يكون المدير المعين رسميًا لهذا المركز.
+     */
+    if (center.ManagerId != currentUser.Id)
+    {
+      return Result<UserResponse>.Failure(
+        CentersErrors.UserIsNotCenterManager
+      );
+    }
 
+    centerId = center.Id;
+  }
+
+  await using var transaction =
+    await _unitOfWork.BeginTransactionAsync();
+
+  try
+  {
     var user = new ApplicationUser
     {
       FirstName = "FirstName",
-      PhoneNumber = null,
       LastName = "LastName",
+      PhoneNumber = null,
+
       UserName = request.Email,
       Email = request.Email,
+
       CreatedAt = DateTime.UtcNow,
-      CenterId = request.CenterId,
+
+      /*
+       * Manager أنشأه Admin:
+       * CenterId = null.
+       *
+       * Employee أنشأه Manager:
+       * CenterId = مركز المدير.
+       */
+      CenterId = centerId,
+
       IsActive = true,
       EmailConfirmed = true,
-      Role = RoleEnum.Client
+      Role = newUserRole
     };
 
-    var result = await _userManager.CreateAsync(user, "123456");
-    if (!result.Succeeded)
+    var createResult =
+      await _userManager.CreateAsync(
+        user,
+        "123456"
+      );
+
+    if (!createResult.Succeeded)
     {
-      return
-        Result<UserResponse>.Failure(SharedErrors.CreateFailed);
+      await transaction.RollbackAsync();
+
+      return Result<UserResponse>.Failure(
+        SharedErrors.CreateFailed
+      );
     }
 
     var roleResult =
       await _userManager.AddToRoleAsync(
         user,
-        nameof(RoleEnum.Client)
+        newUserRole.ToString()
       );
 
-    var response = new UserResponse()
+    /*
+     * في كودك السابق لم يتم فحص نتيجة إضافة الدور.
+     */
+    if (!roleResult.Succeeded)
+    {
+      await transaction.RollbackAsync();
+
+      return Result<UserResponse>.Failure(
+        UserErrors.AddRoleFailed
+      );
+    }
+
+    await _unitOfWork.SaveChangesAsync();
+    await transaction.CommitAsync();
+
+    var response = new UserResponse
     {
       Id = user.Id,
       Email = user.Email,
@@ -329,13 +462,17 @@ public class UserService : IUserService
       PhoneNumber = user.PhoneNumber,
       CreatedAt = user.CreatedAt,
       Role = user.Role.ToString(),
+      CenterId = user.CenterId
     };
-    
-    await _unitOfWork.SaveChangesAsync();
 
     return Result<UserResponse>.Success(response);
   }
-
+  catch
+  {
+    await transaction.RollbackAsync();
+    throw;
+  }
+}
   public async Task<bool> UserExistsAsync(string userId)
   {
     var user = await _userManager.FindByIdAsync(userId);

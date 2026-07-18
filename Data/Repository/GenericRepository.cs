@@ -1,8 +1,8 @@
 ﻿using GenericRepository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using LapisApi.Data;
 using LapisApi.Repositories.Helpers;
+using SisApi.Data;
 
 namespace GenericRepository.Repositories
 {
@@ -17,9 +17,10 @@ namespace GenericRepository.Repositories
       _dbSet = context.Set<T>();
     }
 
-    public async Task AddAsync(T entity)
+    public async Task<T> AddAsync(T entity)
     {
-      await _dbSet.AddAsync(entity);
+      var result = await _dbSet.AddAsync(entity);
+      return result.Entity;
     }
 
     public async Task<T?> GetByIdAsync(object id)

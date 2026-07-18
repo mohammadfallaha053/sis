@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using LapisApi.App.Auth.Enums;
-using LapisApi.App.Auth.Interfaces;
+﻿using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.Users.Dto;
-using LapisApi.App.Users.Dto.Request.Commands;
 using LapisApi.App.Users.Dto.Request.Queries;
-using LapisApi.App.Users.Interfaces;
-using LapisApi.App.Users.Model;
 using LapisApi.Filter;
-namespace LapisApi.App.Users.Controller;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SisApi.App.Auth.Enums;
+using SisApi.App.Users.Dto.Request.Commands;
+using SisApi.App.Users.Interfaces;
+using SisApi.App.Users.Model;
+namespace SisApi.App.Users.Controller;
 
 [Authorize]
 [Route("api/[controller]")]
@@ -43,7 +43,7 @@ public class UserController : ControllerBase
   //
   //   return BadRequest(result.Errors);
   // }
-  [Authorize(Roles = nameof(RoleEnum.Admin))]
+  [Authorize(Roles = nameof(RoleEnum.Admin )+ "," + nameof(RoleEnum.Manager))]
   [HttpGet("get-all")]
   public async Task<IActionResult> GetAllUsers([FromQuery] UserGetAllQuery getAllQuery)
   {
@@ -88,11 +88,19 @@ public class UserController : ControllerBase
     return result.ToActionResult(this);
   }
   
-  [Authorize(Roles = nameof(RoleEnum.Admin))]
+  [Authorize(Roles = nameof(RoleEnum.Admin )+ "," + nameof(RoleEnum.Manager))]
   [HttpPost("toggle-disable")]
   public async Task<IActionResult> DisableUser([FromBody] DisableAgentRequest request)
   {
     var result = await _userService.DisableUserAsync(request);
+    return result.ToActionResult(this);
+  }
+  
+  [Authorize(Roles = nameof(RoleEnum.Admin )+ "," + nameof(RoleEnum.Manager))]
+  [HttpPost("insert")]  
+  public async Task<IActionResult> InsertUser([FromBody] CreateUserRequest request)
+  {
+    var result = await _userService.InsertUserAsync(request);
     return result.ToActionResult(this);
   }
 }

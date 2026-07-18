@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using LapisApi.App.Users.Model;
-using LapisApi.Data;
-
-namespace LapisApi.Extensions;
+using SisApi.App.Users.Model;
+using SisApi.Data;
+namespace SisApi.Extensions;
 
 public static class IdentityServiceExtensions
 {

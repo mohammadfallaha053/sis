@@ -1,5 +1,5 @@
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
+using SisApi.App.MediaFiles.Interfaces;
 namespace LapisApi.Helpers;
 
 public static class FileMergerHelper

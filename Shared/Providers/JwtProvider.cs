@@ -1,14 +1,13 @@
+using LapisApi.OptionConfigurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SisApi.App.Users.Model;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using LapisApi.App.Auth.Enums;
-using LapisApi.App.Users.Model;
-using LapisApi.OptionConfigurations;
-namespace LapisApi.Shared.Providers
+namespace SisApi.Shared.Providers
 {
   public class JwtProvider
   {
@@ -35,11 +34,7 @@ namespace LapisApi.Shared.Providers
         new Claim(JwtRegisteredClaimNames.Email, user.Email!),
         new Claim("uid", user.Id)
       };
-
-      if (roles.Contains(nameof(RoleEnum.Client)) && !string.IsNullOrEmpty(user.CenterId))
-      {
-        claims.Add(new Claim("centerId", user.CenterId));
-      }
+      
 
       claims.AddRange(userClaims);
       claims.AddRange(roleClaims);

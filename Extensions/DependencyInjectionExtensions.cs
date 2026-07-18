@@ -1,13 +1,13 @@
 using LapisApi.App.BackgroundJobs;
 using LapisApi.App.BackgroundJobs.Interfaces;
-using LapisApi.App.Users.Interfaces;
-using LapisApi.Data.Interfaces;
 using LapisApi.Helpers.Security;
 using LapisApi.Middleware;
-using LapisApi.Repository.Generic;
 using LapisApi.Shared.EmailTemplates;
-using LapisApi.Shared.Providers;
 using LapisApi.Shared.Services;
+using SisApi.App.Users.Interfaces;
+using SisApi.Data.Interfaces;
+using SisApi.Data.Repository;
+using SisApi.Shared.Providers;
 namespace LapisApi.Extensions;
 
 public static class DependencyInjectionExtensions

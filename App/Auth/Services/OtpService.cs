@@ -5,11 +5,11 @@ using LapisApi.App.Auth.Enums;
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.Users.Errors;
-using LapisApi.App.Users.Model;
 using LapisApi.Helpers.Extensions;
 using LapisApi.Helpers.Security;
 using LapisApi.Shared.EmailTemplates;
 using LapisApi.Shared.Services;
+using SisApi.App.Users.Model;
 
 public class OtpService : IOtpService
 {

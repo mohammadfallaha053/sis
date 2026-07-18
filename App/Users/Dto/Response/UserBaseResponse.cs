@@ -1,5 +1,5 @@
 using LapisApi.App.MediaFiles.Dto;
-namespace LapisApi.App.Users.Dto.Response;
+namespace SisApi.App.Users.Dto.Response;
 
 public class UserBaseResponse
 {

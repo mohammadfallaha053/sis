@@ -1,17 +1,17 @@
 using AutoMapper;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using LapisApi.App.Auth.Enums;
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
 using LapisApi.App.Settings.Dto;
 using LapisApi.App.Settings.Dto.Commands;
 using LapisApi.App.Settings.Dto.Response;
 using LapisApi.App.Settings.Errors;
 using LapisApi.App.Settings.Interfaces;
-using LapisApi.Data.Interfaces;
 using LapisApi.OptionConfigurations;
-namespace LapisApi.App.Settings.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using SisApi.App.Auth.Enums;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.Data.Interfaces;
+namespace SisApi.App.Settings.Services;
 
 public class SettingService : ISettingService
 {
@@ -62,7 +62,6 @@ public class SettingService : ISettingService
     var inactiveCenters = totalCenters - activeCenters;
 
     var totalRegions = await _unitOfWork.Regions.CountAsync();
-    var totalCities = await _unitOfWork.Cities.CountAsync();
 
     var totalUsers =
       await _unitOfWork.Users.CountAsync(
@@ -82,7 +81,6 @@ public class SettingService : ISettingService
       InactiveCenters = inactiveCenters,
 
       TotalRegions = totalRegions,
-      TotalCities = totalCities,
 
       TotalUsers = totalUsers,
       ActiveUsers = activeUsers,

@@ -1,12 +1,13 @@
 using AutoMapper;
-using LapisApi.App.Users.Dto.Response;
-using LapisApi.App.Users.Model;
-namespace LapisApi.App.Users.Dto.Mapping;
+using SisApi.App.Users.Dto.Response;
+using SisApi.App.Users.Model;
+namespace SisApi.App.Users.Dto.Mapping;
 
 public class UserProfile : Profile
 {
   public UserProfile()
   {
     CreateMap<ApplicationUser, UserBaseResponse>();
+    CreateMap<ApplicationUser, UserResponse>();
   }
 }

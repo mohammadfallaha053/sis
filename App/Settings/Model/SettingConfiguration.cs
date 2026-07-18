@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace LapisApi.App.Settings.Model
+namespace SisApi.App.Settings.Model
 {
   public class SettingConfiguration : IEntityTypeConfiguration<Setting>
   {

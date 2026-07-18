@@ -1,4 +1,4 @@
-﻿namespace LapisApi.App.Users.Dto
+﻿namespace SisApi.App.Users.Dto.Request.Commands
 {
   public class ChangePasswordRequest
   {

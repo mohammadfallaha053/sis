@@ -1,8 +1,8 @@
 ﻿using GenericRepository.Repositories;
 using LapisApi.App.Settings.Interfaces;
-using LapisApi.App.Settings.Model;
-using LapisApi.Data;
-namespace LapisApi.App.Settings.Repository;
+using SisApi.App.Settings.Model;
+using SisApi.Data;
+namespace SisApi.App.Settings.Repository;
 
 public class SettingRepository : GenericRepository<Setting>, ISettingRepository
 {

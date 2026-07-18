@@ -1,29 +1,26 @@
-﻿using JWT53.MyEnum;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
-using LapisApi.App.Auth.Dto;
-using LapisApi.App.Auth.Enums;
+﻿using LapisApi.App.Auth.Dto;
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
-using LapisApi.App.Centers.Errors;
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
 using LapisApi.App.Users.Errors;
-using LapisApi.App.Users.Model;
-using LapisApi.Data;
-using LapisApi.Dto.Auth;
 using LapisApi.Dto.Client;
 using LapisApi.Helpers.Security;
 using LapisApi.Interfaces.Auth;
-using LapisApi.MyEnum;
 using LapisApi.OptionConfigurations;
-using LapisApi.Shared;
 using LapisApi.Shared.Errors;
-using LapisApi.Shared.Providers;
 using LapisApi.Shared.Services;
-namespace LapisApi.Services.Auth;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using SisApi.App.Auth.Dto;
+using SisApi.App.Auth.Enums;
+using SisApi.App.Centers.Errors;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.App.Users.Model;
+using SisApi.Data;
+using SisApi.Shared.Providers;
+using System.IdentityModel.Tokens.Jwt;
+namespace SisApi.App.Auth.Services;
 
 public class AuthService : IAuthService
 {
@@ -81,8 +78,7 @@ public class AuthService : IAuthService
       LastName = model.LastName,
       PhoneNumber = model.PhoneNumber,
       IsActive = true,
-      Role = RoleEnum.Client,
-      City = model.City
+      Role = RoleEnum.Client
     };
 
     var result = await _userManager.CreateAsync(user, model.Password);
@@ -139,26 +135,21 @@ public class AuthService : IAuthService
     //   return
     //     Result<AuthResponse>.Failure(AuthErrors.EmailNotConfirmed);
     // }
-
-    if (user.TwoFactorEnabled)
-    {
-      if (string.IsNullOrWhiteSpace(model.Code))
-      {
-        return Result<AuthResponse>.Failure(AuthErrors.RequireVerificationCode);
-      }
-
-      var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", model.Code);
-      if (!isValid)
-      {
-        return Result<AuthResponse>.Failure(AuthErrors.InvalidVerificationCode);
-      }
-    }
-
+    
+    
     if (user.IsActive == false)
     {
       return Result<AuthResponse>.Failure(UserErrors.AccountDisabled);
     }
     
+    
+    var isManger = await _userManager.IsInRoleAsync(user, nameof(RoleEnum.Manager));
+    if (isManger && user.CenterId is null)
+    {
+      {
+        return Result<AuthResponse>.Failure(CentersErrors.NoCenterForThisManagerYet);
+      }
+    }
 
     var jwtSecurityToken = await _jwtProvider.CreateJwtToken(user);
     var rolesList = await _userManager.GetRolesAsync(user);
@@ -178,11 +169,9 @@ public class AuthService : IAuthService
         Id = user.Id,
         Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
         Email = user.Email,
-        EmailConfirmed = user.EmailConfirmed,
         ExpiresOn = jwtSecurityToken.ValidTo,
         Role = role,
         PhoneNumber = user.PhoneNumber,
-        TwoFactorEnabled = user.TwoFactorEnabled,
         Image = files.FirstOrDefault()
       };
 

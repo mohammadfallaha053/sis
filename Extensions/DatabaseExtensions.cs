@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using LapisApi.Data;
-namespace LapisApi.Extensions;
+using SisApi.Data;
+namespace SisApi.Extensions;
 
 public static class DatabaseExtensions
 {

@@ -13,13 +13,13 @@ using LapisApi.App.Comments.Interfaces;
 using LapisApi.App.Comments.Model;
 using LapisApi.App.MediaFiles.Dto;
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
-using LapisApi.App.Users.Dto.Response;
-using LapisApi.App.Users.Interfaces;
-using LapisApi.Data.Interfaces;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LapisApi.Interfaces.Auth;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.App.Users.Dto.Response;
+using SisApi.App.Users.Interfaces;
+using SisApi.Data.Interfaces;
 namespace LapisApi.App.Comments.Services;
 
 public class CommentService : ICommentService
@@ -143,7 +143,6 @@ public class CommentService : ICommentService
         FirstName = comment.User?.FirstName ?? string.Empty,
         LastName = comment.User?.LastName ?? string.Empty,
         Image = files.FirstOrDefault(),
-        City = comment.User?.City
       };
 
       result.Add(

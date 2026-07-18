@@ -1,14 +1,15 @@
-using Microsoft.EntityFrameworkCore;
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.MediaFiles.Dto;
 using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
 using LapisApi.App.MediaFiles.Model;
-using LapisApi.Data;
 using LapisApi.Helpers.Extensions;
 using LapisApi.Helpers.Security;
-namespace LapisApi.App.MediaFiles.Services;
+using Microsoft.EntityFrameworkCore;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.App.MediaFiles.Model;
+using SisApi.Data;
+namespace SisApi.App.MediaFiles.Services;
 
 public class FileService : IFileService
 {
@@ -18,7 +19,7 @@ public class FileService : IFileService
   private readonly IClaimService _claimService;
   private readonly IAttemptTrackerService _attemptTrackerService;
   private readonly IHttpContextAccessor _httpContextAccessor;
-  
+
   public FileService(
     ApplicationDbContext context,
     IWebHostEnvironment env,
@@ -26,7 +27,7 @@ public class FileService : IFileService
     IClaimService claimService,
     IAttemptTrackerService attemptTrackerService,
     IHttpContextAccessor httpContextAccessor
-    )
+  )
   {
     _context = context;
     _env = env;
@@ -36,89 +37,115 @@ public class FileService : IFileService
     _httpContextAccessor = httpContextAccessor;
   }
 
-public async Task<Result<FileUploadResponse>> UploadTempFileAsync(IFormFile file)
-{
-  if (file == null || file.Length == 0)
-    return Result<FileUploadResponse>.Failure(FileErrors.UploadInvalid);
-
-  var ip = _httpContextAccessor.HttpContext?.GetClientIp();
-  var key = $"upload:ip:{ip}";
-
-  // 🚫 تحديد معدل المحاولات
-  var isLimited = await _attemptTrackerService.IsLimitedAsync(
-    key,
-    maxAttempts: 5,
-    window: TimeSpan.FromMinutes(1),
-    lockoutDuration: TimeSpan.FromMinutes(5)
-  );
-
-  if (isLimited)
-    return Result<FileUploadResponse>.Failure(AuthErrors.TooManyRequests);
-
-  await _attemptTrackerService.RegisterAttemptAsync(key);
-
-  var isAdmin = await _claimService.IsAdminAsync();
-
-  var extension = Path.GetExtension(file.FileName).ToLower();
-  var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
-  var videoExtensions = new[] { ".mp4", ".mov", ".avi", ".mkv", ".webm" };
-
-  if (!imageExtensions.Contains(extension) && (!isAdmin || !videoExtensions.Contains(extension)))
-    return Result<FileUploadResponse>.Failure(FileErrors.UnsupportedFileType);
-
-  // تحقق من الحجم المسموح
-  if (imageExtensions.Contains(extension) && file.Length > 3 * 1024 * 1024) // 3MB
-    return Result<FileUploadResponse>.Failure(FileErrors.FileTooLarge);
-
-  if (videoExtensions.Contains(extension) && file.Length > 25 * 1024 * 1024) // 25MB
-    return Result<FileUploadResponse>.Failure(FileErrors.FileTooLarge);
-
-  var tempFolder = Path.Combine("uploads", "temp");
-  var folderPath = Path.Combine(_env.WebRootPath, tempFolder);
-  Directory.CreateDirectory(folderPath);
-
-  var fileName = $"{Guid.NewGuid()}{extension}";
-  var filePath = Path.Combine(folderPath, fileName);
-
-  using (var stream = new FileStream(filePath, FileMode.Create))
+  public async Task<Result<FileUploadResponse>> UploadTempFileAsync(IFormFile file)
   {
-    await file.CopyToAsync(stream);
+    if (file == null || file.Length == 0)
+      return Result<FileUploadResponse>.Failure(FileErrors.UploadInvalid);
+
+    var ip = _httpContextAccessor.HttpContext?.GetClientIp();
+    var key = $"upload:ip:{ip}";
+
+    // 🚫 تحديد معدل المحاولات
+    var isLimited = await _attemptTrackerService.IsLimitedAsync(
+      key,
+      maxAttempts: 5,
+      window: TimeSpan.FromMinutes(1),
+      lockoutDuration: TimeSpan.FromMinutes(5)
+    );
+
+    if (isLimited)
+      return Result<FileUploadResponse>.Failure(AuthErrors.TooManyRequests);
+
+    await _attemptTrackerService.RegisterAttemptAsync(key);
+
+    var isAdmin = await _claimService.IsAdminAsync();
+
+    var extension = Path.GetExtension(file.FileName).ToLower();
+    var imageExtensions = new[]
+    {
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".bmp",
+      ".webp"
+    };
+    var videoExtensions = new[]
+    {
+      ".mp4",
+      ".mov",
+      ".avi",
+      ".mkv",
+      ".webm"
+    };
+
+    if (!imageExtensions.Contains(extension) && (!isAdmin || !videoExtensions.Contains(extension)))
+      return Result<FileUploadResponse>.Failure(FileErrors.UnsupportedFileType);
+
+    // تحقق من الحجم المسموح
+    if (imageExtensions.Contains(extension) && file.Length > 3 * 1024 * 1024) // 3MB
+      return Result<FileUploadResponse>.Failure(FileErrors.FileTooLarge);
+
+    if (videoExtensions.Contains(extension) && file.Length > 25 * 1024 * 1024) // 25MB
+      return Result<FileUploadResponse>.Failure(FileErrors.FileTooLarge);
+
+    var tempFolder = Path.Combine("uploads", "temp");
+    var folderPath = Path.Combine(_env.WebRootPath, tempFolder);
+    Directory.CreateDirectory(folderPath);
+
+    var fileName = $"{Guid.NewGuid()}{extension}";
+    var filePath = Path.Combine(folderPath, fileName);
+
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+      await file.CopyToAsync(stream);
+    }
+
+    var entity = new MediaFile
+    {
+      FilePath = Path.Combine("temp", fileName).Replace("\\", "/"),
+      IsAttached = false
+    };
+
+    _context.MediaFiles.Add(entity);
+    await _context.SaveChangesAsync();
+
+    return Result<FileUploadResponse>.Success(new FileUploadResponse
+      {
+        FileId = entity.Id,
+        FilePath = entity.FilePath
+      }
+    );
   }
 
-  var entity = new MediaFile
-  {
-    FilePath = Path.Combine("temp", fileName).Replace("\\", "/"),
-    IsAttached = false
-  };
-
-  _context.MediaFiles.Add(entity);
-  await _context.SaveChangesAsync();
-
-  return Result<FileUploadResponse>.Success(new FileUploadResponse
-  {
-    FileId = entity.Id,
-    FilePath = entity.FilePath
-  });
-}
-
-  public async Task<Result<object>> AttachFileAsync(int fileId, AttachmentEntityType entityType, string entityId)
+  public async Task<Result<FileResponse>> AttachFileAsync(
+    int fileId,
+    AttachmentEntityType entityType,
+    string entityId
+  )
   {
     var file = await _context.MediaFiles.FindAsync(fileId);
+
     if (file == null)
-      return Result<object>.Failure(FileErrors.FileNotFound);
+      return Result<FileResponse>.Failure(FileErrors.FileNotFound);
 
     if (file.IsAttached)
-      return Result<object>.Failure(FileErrors.FileAlreadyAttached);
+      return Result<FileResponse>.Failure(FileErrors.FileAlreadyAttached);
 
     var destFolder = Path.Combine("uploads", entityType.ToString().ToLower());
     var destPath = Path.Combine(_env.WebRootPath, destFolder);
     Directory.CreateDirectory(destPath);
 
     var fileName = Path.GetFileName(file.FilePath);
-    var sourcePath = Path.Combine(_env.WebRootPath, "uploads", file.FilePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+
+    var sourcePath = Path.Combine(
+      _env.WebRootPath,
+      "uploads",
+      file.FilePath.Replace("/", Path.DirectorySeparatorChar.ToString())
+    );
 
     if (!File.Exists(sourcePath))
-      return Result<object>.Failure(FileErrors.SourceFileMissing);
+      return Result<FileResponse>.Failure(FileErrors.SourceFileMissing);
 
     var newFullPath = Path.Combine(destPath, fileName);
 
@@ -128,7 +155,7 @@ public async Task<Result<FileUploadResponse>> UploadTempFileAsync(IFormFile file
     }
     catch
     {
-      return Result<object>.Failure(FileErrors.FileMoveFailed);
+      return Result<FileResponse>.Failure(FileErrors.FileMoveFailed);
     }
 
     file.FilePath = Path.Combine(destFolder, fileName).Replace("\\", "/");
@@ -137,21 +164,39 @@ public async Task<Result<FileUploadResponse>> UploadTempFileAsync(IFormFile file
     file.EntityId = entityId;
 
     await _context.SaveChangesAsync();
-    return Result<object>.Success(null);
-  }
 
-  public async Task<Result<object>> AttachFilesAsync(List<int> fileIds, AttachmentEntityType entityType, string entityId)
+    return Result<FileResponse>.Success(new FileResponse
+      {
+        Id = file.Id,
+        FilePath = file.FilePath
+      }
+    );
+  }
+  public async Task<Result<List<FileResponse>>> AttachFilesAsync(
+    List<int> fileIds,
+    AttachmentEntityType entityType,
+    string entityId
+  )
   {
+    var files = new List<FileResponse>();
+
     foreach (var id in fileIds)
     {
       var result = await AttachFileAsync(id, entityType, entityId);
+
       if (!result.IsSuccess)
-        return result; // نعيد الخطأ الأصلي دون إنشاء جديد
+      {
+        return Result<List<FileResponse>>.Failure(result.Error);
+      }
+
+      if (result.Data is not null)
+      {
+        files.Add(result.Data);
+      }
     }
 
-    return Result<object>.Success(null);
+    return Result<List<FileResponse>>.Success(files);
   }
-
   public async Task<Result<object>> DeleteFilesAsync(List<int> fileIds)
   {
     foreach (var id in fileIds)
@@ -191,43 +236,129 @@ public async Task<Result<FileUploadResponse>> UploadTempFileAsync(IFormFile file
       .SingleOrDefaultAsync();
   }
 
-  public async Task<Result<object>> ProcessFileUpdateAsync(
+  
+  public async Task<Result<FileResponse?>> ProcessSingleFileUpdateAsync(
+    int? newFileId,
+    AttachmentEntityType entityType,
+    string entityId
+  )
+  {
+    var oldFile =
+      await GetFileByEntityAsync(
+        entityId: entityId,
+        entityType: entityType
+      );
+
+    int? oldFileId = oldFile?.Id;
+
+    return await ProcessFileUpdateAsync(
+      newFileId: newFileId,
+      oldFileId: oldFileId,
+      entityType: entityType,
+      entityId: entityId
+    );
+  }
+  
+  public async Task<Dictionary<string, FileResponse>> GetFirstFilesByEntitiesAsync(
+    List<string> entityIds,
+    AttachmentEntityType entityType
+  )
+  {
+    if (entityIds.Count == 0)
+    {
+      return new Dictionary<string, FileResponse>();
+    }
+
+    var files =
+      await _context.MediaFiles
+        .Where(f =>
+          f.EntityId != null &&
+          entityIds.Contains(f.EntityId) &&
+          f.EntityType == entityType
+        )
+        .OrderBy(f => f.Id)
+        .Select(f => new
+        {
+          EntityId = f.EntityId!,
+          File = new FileResponse
+          {
+            Id = f.Id,
+            FilePath = f.FilePath
+          }
+        })
+        .ToListAsync();
+
+    return files
+      .GroupBy(f => f.EntityId)
+      .ToDictionary(
+        g => g.Key,
+        g => g.First().File
+      );
+  }
+  
+  
+  public async Task<Result<FileResponse?>> ProcessFileUpdateAsync(
     int? newFileId,
     int? oldFileId,
     AttachmentEntityType entityType,
     string entityId
   )
   {
-    // لا يوجد ملف جديد، ولكن يوجد قديم => احذف
+    // لا يوجد ملف جديد، ولكن يوجد قديم => احذف القديم
     if (newFileId == null && oldFileId != null)
     {
       var deleteResult = await DeleteFileAsync(oldFileId.Value);
+
       if (!deleteResult.IsSuccess)
-        return Result<object>.Failure(deleteResult.Error);
+      {
+        return Result<FileResponse?>.Failure(deleteResult.Error);
+      }
+
+      return Result<FileResponse?>.Success(null);
     }
 
     // يوجد ملف جديد
-    else if (newFileId != null)
+    if (newFileId != null)
     {
-      // لو مختلف عن القديم
+      // الملف الجديد مختلف عن القديم
       if (oldFileId == null || newFileId.Value != oldFileId.Value)
       {
-        // جرّب ربط الجديد أولًا
-        var attachResult = await AttachFileAsync(newFileId.Value, entityType, entityId);
-        if (!attachResult.IsSuccess)
-          return Result<object>.Failure(attachResult.Error);
+        var attachResult =
+          await AttachFileAsync(
+            fileId: newFileId.Value,
+            entityType: entityType,
+            entityId: entityId
+          );
 
-        // بعد نجاح الربط نحذف القديم
+        if (!attachResult.IsSuccess)
+        {
+          return Result<FileResponse?>.Failure(attachResult.Error);
+        }
+
         if (oldFileId != null)
         {
           var deleteResult = await DeleteFileAsync(oldFileId.Value);
+
           if (!deleteResult.IsSuccess)
-            return Result<object>.Failure(deleteResult.Error);
+          {
+            return Result<FileResponse?>.Failure(deleteResult.Error);
+          }
         }
+
+        return Result<FileResponse?>.Success(attachResult.Data);
       }
+
+      // الملف الجديد هو نفسه القديم
+      var currentFile =
+        await GetFileByEntityAsync(
+          entityId: entityId,
+          entityType: entityType
+        );
+
+      return Result<FileResponse?>.Success(currentFile);
     }
 
-    return Result<object>.Success(null);
+    return Result<FileResponse?>.Success(null);
   }
 
 

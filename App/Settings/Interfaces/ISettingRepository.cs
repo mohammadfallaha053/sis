@@ -1,5 +1,5 @@
 ﻿using GenericRepository.Interfaces;
-using LapisApi.App.Settings.Model;
+using SisApi.App.Settings.Model;
 
 namespace LapisApi.App.Settings.Interfaces
 {

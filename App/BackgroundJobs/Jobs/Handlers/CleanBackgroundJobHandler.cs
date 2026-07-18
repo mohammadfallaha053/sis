@@ -1,6 +1,6 @@
 using LapisApi.App.BackgroundJobs.Enums;
 using LapisApi.App.BackgroundJobs.Interfaces;
-using LapisApi.Data.Interfaces;
+using SisApi.Data.Interfaces;
 namespace LapisApi.App.BackgroundJobs.Jobs.Handlers;
 
 public class CleanBackgroundJobHandler : IBackgroundJobHandler

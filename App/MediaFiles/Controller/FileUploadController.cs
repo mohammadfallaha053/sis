@@ -1,12 +1,9 @@
+using LapisApi.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LapisApi.App.Auth.Enums;
-using LapisApi.App.MediaFiles.Dto;
-using LapisApi.App.MediaFiles.Enums;
-using LapisApi.App.MediaFiles.Interfaces;
-using LapisApi.Data;
-using LapisApi.Filter;
-namespace LapisApi.App.MediaFiles.Controller;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.Data;
+namespace SisApi.App.MediaFiles.Controller;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]

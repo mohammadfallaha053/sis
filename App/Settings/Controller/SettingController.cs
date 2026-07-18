@@ -3,6 +3,7 @@ using LapisApi.App.Settings.Dto.Commands;
 using LapisApi.App.Settings.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SisApi.App.Auth.Enums;
 namespace SisApi.App.Settings.Controller;
 
 [Authorize(Roles = nameof(RoleEnum.Admin))]

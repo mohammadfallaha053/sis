@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SisApi.App.MediaFiles.Model;
 
 namespace LapisApi.App.MediaFiles.Model
 {

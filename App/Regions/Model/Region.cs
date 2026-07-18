@@ -1,5 +1,5 @@
 ﻿using SisApi.App.Centers.Model;
-using SisApi.App.Cities.Model;
+using SisApi.Shared.Infos;
 using System.ComponentModel.DataAnnotations;
 namespace SisApi.App.Regions.Model
 {
@@ -7,15 +7,16 @@ namespace SisApi.App.Regions.Model
   {
     [Key]
     public int Id { get; set; }
-    public required string NameAr { get; set; }
-    public required string NameEn { get; set; }
-    
+
+    public required string Name { get; set; }
     public double Lat { get; set; }
     public double Long { get; set; }
 
+    public List<VisitInfo> Visits { get; set; } = [];
+
     public bool IsActive { get; set; }
-    public int CityId { get; set; }
-    public City City { get; set; }
-    public ICollection<Center> Centers { get; set; } = new List<Center>(); 
+
+    public int CenterId { get; set; }
+    public Center Center { get; set; }
   }
 }

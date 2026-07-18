@@ -1,8 +1,8 @@
 using LapisApi.App.BackgroundJobs.Enums;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.BackgroundJobs.Jobs.Payloads;
-using LapisApi.App.MediaFiles.Interfaces;
-using LapisApi.Data.Interfaces;
+using SisApi.App.MediaFiles.Interfaces;
+using SisApi.Data.Interfaces;
 namespace LapisApi.App.BackgroundJobs;
 
 public class BackgroundJobProcessor

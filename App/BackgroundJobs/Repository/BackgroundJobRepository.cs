@@ -1,8 +1,8 @@
 ﻿using GenericRepository.Repositories;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.BackgroundJobs.Model;
-using LapisApi.Data;
-namespace LapisApi.App.BackgroundJobs.Repository;
+using SisApi.Data;
+namespace SisApi.App.BackgroundJobs.Repository;
 
 public class BackgroundJobRepository : GenericRepository<BackgroundJob>, IBackgroundJobRepository
 {

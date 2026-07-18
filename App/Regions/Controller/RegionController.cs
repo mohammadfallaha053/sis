@@ -3,7 +3,9 @@ using LapisApi.App.Regions.Dto;
 using LapisApi.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SisApi.App.Auth.Enums;
 using SisApi.App.Regions.Dto;
+using SisApi.App.Regions.Dto.Request.Commands;
 using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Interfaces;
 namespace SisApi.App.Regions.Controller;
@@ -36,13 +38,7 @@ public class RegionController : ControllerBase
     var result = await _RegionService.GetAllAsync(query);
     return result.ToActionResult(this);
   }
-  [Authorize]
-  [HttpGet("get-auto-complete")]
-  public async Task<IActionResult> GetAutoComplete([FromQuery] RegionGetAutoCompleteQuery query)
-  {
-    var result = await _RegionService.GetAutoComplete(query);
-    return result.ToActionResult(this);
-  }
+
   [Authorize(Roles = nameof(RoleEnum.Admin))]
   [HttpGet("get-by-id/{id}")]
   public async Task<IActionResult> GetById(int id)

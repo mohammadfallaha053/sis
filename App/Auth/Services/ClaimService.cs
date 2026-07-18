@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using LapisApi.App.Auth.Interfaces;
-using LapisApi.App.Users.Model;
-using LapisApi.Interfaces.Auth;
-namespace LapisApi.Services.Auth;
+using Microsoft.AspNetCore.Identity;
+using SisApi.App.Users.Model;
+using System.Security.Claims;
+namespace SisApi.App.Auth.Services;
 
 public class ClaimService : IClaimService
 {
