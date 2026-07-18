@@ -1,5 +1,6 @@
 using LapisApi.App.Users.Enums;
-namespace LapisApi.App.Users.Dto.Request.Queries;
+using SisApi.App.Auth.Enums;
+namespace SisApi.App.Users.Dto.Request.Queries;
 
 public class UserGetAllQuery
 {
@@ -9,5 +10,6 @@ public class UserGetAllQuery
   public SortRequest<UserSortField>? Sort { get; set; }
   public bool? IsActive { get; set; } = null;
   
+  public RoleEnum? Role { get; set; }
 }
 

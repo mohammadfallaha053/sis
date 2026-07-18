@@ -10,7 +10,6 @@ using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Interfaces;
 namespace SisApi.App.Regions.Controller;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class RegionController : ControllerBase
@@ -30,9 +29,7 @@ public class RegionController : ControllerBase
     return result.ToActionResult(this);
   }
 
-    [ServiceFilter(typeof(ActiveUserAuthorizationFilter))]
-    [Authorize(Roles = nameof(RoleEnum.Admin) + "," + nameof(RoleEnum.Client))]
-    [HttpGet("get-all")]
+  [HttpGet("get-all")]
   public async Task<IActionResult> GetAll([FromQuery] RegionGetAllQuery query)
   {
     var result = await _RegionService.GetAllAsync(query);
@@ -46,6 +43,7 @@ public class RegionController : ControllerBase
     var result = await _RegionService.GetByIdAsync(id);
     return result.ToActionResult(this);
   }
+  
   [Authorize(Roles = nameof(RoleEnum.Admin))]
   [HttpPut("edit/{id}")]
   public async Task<IActionResult> Update(int id, [FromBody] RegionUpdateCommand command)
@@ -54,6 +52,7 @@ public class RegionController : ControllerBase
 
     return result.ToActionResult(this);
   }
+  
   [Authorize(Roles = nameof(RoleEnum.Admin))]
   [HttpDelete("delete/{id}")]
   public async Task<IActionResult> Delete(int id)

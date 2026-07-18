@@ -8,7 +8,7 @@ public class CentersResponse
   public string Name { get; set; }
   public string Phone { get; set; }
   public string Location { get; set; }
-  public UserResponse? Manager { get; set; }
+  public UserBaseResponse? Manager { get; set; }
   
   public DateTime CreatedAt { get; set; }
   public bool IsActive { get; set; } = true;

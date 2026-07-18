@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LapisApi.App.Regions.Dto;
 using LapisApi.App.Regions.Enums;
-using LapisApi.App.Regions.Errors;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LinqKit;
@@ -9,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SisApi.App.Regions.Dto.Request.Commands;
 using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Dto.Response;
+using SisApi.App.Regions.Errors;
 using SisApi.App.Regions.Interfaces;
 using SisApi.App.Regions.Model;
 using SisApi.Data.Interfaces;

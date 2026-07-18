@@ -1,4 +1,4 @@
-namespace LapisApi.Dto.Client;
+namespace SisApi.App.Users.Dto.Response;
 
 public class ClientRegisterResponse
 {
@@ -8,5 +8,6 @@ public class ClientRegisterResponse
   public string Role { get; set; }
   public DateTime CreatedAt { get; set; }
   public string PhoneNumber { get; set; }
-
+  
+  public int? RegionId { get; set; }
 }

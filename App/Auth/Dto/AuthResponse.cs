@@ -10,5 +10,7 @@ namespace SisApi.App.Auth.Dto
     public DateTime ExpiresOn { get; set; }
     public string PhoneNumber { get; set; }
     public FileResponse? Image { get; set; }
+    
+    public int? RegionId { get; set; }
   }
 }

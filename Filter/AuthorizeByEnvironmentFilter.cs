@@ -1,10 +1,9 @@
-using JWT53.MyEnum;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using LapisApi.App.Auth.Errors;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
-namespace LapisApi.Filter;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+namespace SisApi.Filter;
 
 public class AuthorizeByEnvironmentFilter : IAuthorizationFilter
 {
@@ -18,17 +17,7 @@ public class AuthorizeByEnvironmentFilter : IAuthorizationFilter
     "/api/auth/confirm-email",
     "/api/auth/send-otp",
     "/api/auth/verify-otp",
-    "/api/payment/paypal/return",
-    "/api/payment/paypal/cancel",
-    "/api/sender/register",
-    "/api/sender/get-slider-comments",
-    "/api/sender/get-ads",
-    "/api/sender/get-commission-table",
-    "/api/user/contact-us",
-    "/api/sender/get-centers",
-    "/api/sender/get-Regions",
-    "/api/sender/get-Cities",
-    "/api/sender/get-settings",
+    "/api/region/get-all",
   };
 
   public AuthorizeByEnvironmentFilter(IHostEnvironment env)

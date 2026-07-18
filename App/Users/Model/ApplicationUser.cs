@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SisApi.App.Auth.Enums;
 using SisApi.App.Centers.Model;
+using SisApi.App.Regions.Model;
 namespace SisApi.App.Users.Model
 {
   public class ApplicationUser : IdentityUser
@@ -17,5 +18,7 @@ namespace SisApi.App.Users.Model
     public Center? ManagedCenter { get; set; }
     public required bool IsActive { get; set; } = true;
     public required RoleEnum Role { get; set; }
+    public int? RegionId { get; set; }  
+    public Region Region { get; set; }
   }
 }

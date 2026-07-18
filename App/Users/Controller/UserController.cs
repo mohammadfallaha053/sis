@@ -1,13 +1,13 @@
 ﻿using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.Users.Dto;
-using LapisApi.App.Users.Dto.Request.Queries;
 using LapisApi.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SisApi.App.Auth.Enums;
 using SisApi.App.Users.Dto.Request.Commands;
+using SisApi.App.Users.Dto.Request.Queries;
 using SisApi.App.Users.Interfaces;
 using SisApi.App.Users.Model;
 namespace SisApi.App.Users.Controller;

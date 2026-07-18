@@ -1,6 +1,6 @@
 ﻿using LapisApi.App.Auth.Dto;
-using LapisApi.Dto.Client;
 using SisApi.App.Auth.Dto;
+using SisApi.App.Users.Dto.Response;
 namespace LapisApi.Interfaces.Auth
 {
   public interface IAuthService

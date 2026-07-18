@@ -8,6 +8,7 @@ using LapisApi.Filter;
 using LapisApi.Middleware;
 using LapisApi.App.BackgroundJobs.Scheduler;
 using SisApi.Extensions;
+using SisApi.Filter;
 using SisApi.Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,5 @@
 using GenericRepository.Interfaces;
 using LapisApi.App.BackgroundJobs.Interfaces;
-using LapisApi.App.Comments.Interfaces;
 using LapisApi.App.Regions.Interfaces;
 using LapisApi.App.Settings.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -14,8 +13,6 @@ public interface IUnitOfWork : IDisposable
   ICentersRepository Centers { get; }
   ISettingRepository Settings { get; }
   IGenericRepository<ApplicationUser> Users { get; }
-  
-  ICommentRepository Comments { get; }
   
   IBackgroundJobRepository BackgroundJobs { get; }
   

@@ -7,7 +7,7 @@ public class UserProfile : Profile
 {
   public UserProfile()
   {
-    CreateMap<ApplicationUser, UserBaseResponse>();
     CreateMap<ApplicationUser, UserResponse>();
+    CreateMap<ApplicationUser, UserBaseResponse>();
   }
 }

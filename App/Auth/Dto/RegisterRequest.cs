@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace LapisApi.App.Auth.Dto
+namespace SisApi.App.Auth.Dto
 {
   public class RegisterRequest
   {
@@ -15,8 +15,8 @@ namespace LapisApi.App.Auth.Dto
 
     [Required]
     public string Password { get; set; } = string.Empty;
-
-    public string? City { get; set; } = null;
+    [Required]
+    public int RegionId { get; set; } 
 
     [Required]
     public string PhoneNumber { get; set; } = string.Empty;

@@ -8,6 +8,7 @@ public interface IClaimService
   bool IsAuthenticated();
 
   Task<bool> IsAdminAsync();
- 
+
+  Task<bool> IsClientAsync();
   IEnumerable<string> GetRoles();
 }

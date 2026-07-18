@@ -1,4 +1,6 @@
 using LapisApi.App.MediaFiles.Dto;
+using SisApi.App.Centers.Dto.Response;
+using SisApi.App.Regions.Dto.Response;
 namespace SisApi.App.Users.Dto.Response;
 
 public class UserResponse
@@ -9,9 +11,11 @@ public class UserResponse
   public string LastName { get; set; } = default!;
   public string PhoneNumber { get; set; } = default!;
   public string Role { get; set; } = default!;
+  public CentersResponse? Center { get; set; }
   
-  public int? CenterId { get; set; }
   
+  public int? RegionId { get; set; }
+  public RegionResponse?  Region { get; set; } = default!;
   public bool IsActive { get; set; }
   public DateTime CreatedAt { get; set; }
 

@@ -3,7 +3,6 @@ using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.Users.Errors;
-using LapisApi.Dto.Client;
 using LapisApi.Helpers.Security;
 using LapisApi.Interfaces.Auth;
 using LapisApi.OptionConfigurations;
@@ -16,6 +15,8 @@ using SisApi.App.Auth.Dto;
 using SisApi.App.Auth.Enums;
 using SisApi.App.Centers.Errors;
 using SisApi.App.MediaFiles.Interfaces;
+using SisApi.App.Regions.Errors;
+using SisApi.App.Users.Dto.Response;
 using SisApi.App.Users.Model;
 using SisApi.Data;
 using SisApi.Shared.Providers;
@@ -69,6 +70,20 @@ public class AuthService : IAuthService
         Result<ClientRegisterResponse>.Failure(UserErrors.EmailAlreadyUsed);
     }
 
+    var isRegionExists =
+      await _context
+        .Regions
+        .AnyAsync(
+          x => x.Id == model.RegionId
+        );
+    
+    
+    if (!isRegionExists)
+    {
+      return
+        Result<ClientRegisterResponse>.Failure(RegionErrors.NotFound);
+    }
+
     var user = new ApplicationUser
     {
       CreatedAt = date,
@@ -78,7 +93,8 @@ public class AuthService : IAuthService
       LastName = model.LastName,
       PhoneNumber = model.PhoneNumber,
       IsActive = true,
-      Role = RoleEnum.Client
+      Role = RoleEnum.Client,
+      RegionId = model.RegionId
     };
 
     var result = await _userManager.CreateAsync(user, model.Password);
@@ -101,7 +117,8 @@ public class AuthService : IAuthService
       EmailConfirmed = user.EmailConfirmed,
       Role = nameof(RoleEnum.Client),
       PhoneNumber = user.PhoneNumber,
-      CreatedAt = user.CreatedAt
+      CreatedAt = user.CreatedAt,
+      RegionId = user.RegionId,
     };
 
     return Result<ClientRegisterResponse>.Success(data);
@@ -135,14 +152,14 @@ public class AuthService : IAuthService
     //   return
     //     Result<AuthResponse>.Failure(AuthErrors.EmailNotConfirmed);
     // }
-    
-    
+
+
     if (user.IsActive == false)
     {
       return Result<AuthResponse>.Failure(UserErrors.AccountDisabled);
     }
-    
-    
+
+
     var isManger = await _userManager.IsInRoleAsync(user, nameof(RoleEnum.Manager));
     if (isManger && user.CenterId is null)
     {
@@ -172,7 +189,8 @@ public class AuthService : IAuthService
         ExpiresOn = jwtSecurityToken.ValidTo,
         Role = role,
         PhoneNumber = user.PhoneNumber,
-        Image = files.FirstOrDefault()
+        Image = files.FirstOrDefault(),
+        RegionId = user.RegionId
       };
 
     return Result<AuthResponse>.Success(result);

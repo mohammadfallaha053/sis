@@ -26,6 +26,13 @@ public class ClaimService : IClaimService
     var userId = GetUserId();
     return await HasRoleAsync(userId, "Admin");
   }
+  
+  public async Task<bool> IsClientAsync()
+  {
+    var userId = GetUserId();
+    return await HasRoleAsync(userId, "Client");
+  }
+
 
   public async Task<bool> HasRoleAsync(string userId, string role)
   {

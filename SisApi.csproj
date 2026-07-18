@@ -44,7 +44,6 @@
     <Folder Include="App\Auth\Dto\Request\Commands\" />
     <Folder Include="App\Auth\Dto\Request\Queries\" />
     <Folder Include="App\Auth\Dto\Response\" />
-    <Folder Include="App\Comments\Dto\Request\Commands\" />
     <Folder Include="App\Users\Repository\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="wwwroot\uploads\temp\" />

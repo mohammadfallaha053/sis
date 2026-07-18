@@ -11,9 +11,9 @@ public class RegionResponse
   public double Long { get; set; }
 
   public List<VisitInfo> Visits { get; set; }
-  public required int CenterId { get; set; }
+  
+  public int? CenterId { get; set; }
+  public CentersResponse Center { get; set; }
   
   public bool IsActive { get; set; }
-
-  public CentersResponse Center { get; set; }
 }
