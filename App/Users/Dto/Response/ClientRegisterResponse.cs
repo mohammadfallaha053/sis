@@ -10,4 +10,8 @@ public class ClientRegisterResponse
   public string PhoneNumber { get; set; }
   
   public int? RegionId { get; set; }
+  
+      
+  public double? Lat { get; set; } 
+  public double? Long { get; set; } 
 }

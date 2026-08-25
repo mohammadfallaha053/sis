@@ -1,6 +1,4 @@
-﻿using LapisApi.App.Regions.Dto;
-using SisApi.App.Regions.Dto;
-using SisApi.App.Regions.Dto.Request.Commands;
+﻿using SisApi.App.Regions.Dto.Request.Commands;
 using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Dto.Response;
 namespace SisApi.App.Regions.Interfaces;

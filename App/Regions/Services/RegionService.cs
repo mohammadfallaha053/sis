@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
-using LapisApi.App.Regions.Dto;
+using LapisApi.App.Auth.Errors;
+using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.Regions.Enums;
+using LapisApi.App.Users.Errors;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
+using SisApi.App.Auth.Enums;
+using SisApi.App.Centers.Errors;
 using SisApi.App.Regions.Dto.Request.Commands;
 using SisApi.App.Regions.Dto.Request.Queries;
 using SisApi.App.Regions.Dto.Response;
@@ -19,11 +23,17 @@ public class RegionService : IRegionService
 {
   private readonly IUnitOfWork _unitOfWork;
   private readonly IMapper _mapper;
+  private readonly IClaimService _claimService;
 
-  public RegionService(IUnitOfWork unitOfWork, IMapper mapper)
+  public RegionService(
+    IUnitOfWork unitOfWork, 
+    IMapper mapper,
+    IClaimService claimService
+    )
   {
     _unitOfWork = unitOfWork;
     _mapper = mapper;
+    _claimService = claimService;
   }
 
   public async Task<Result<RegionResponse>> AddAsync(RegionCreateCommand command)
@@ -39,46 +49,118 @@ public class RegionService : IRegionService
 
 
 
-  public async Task<Result<IEnumerable<RegionResponse>>> GetAllAsync(RegionGetAllQuery query)
+public async Task<Result<IEnumerable<RegionResponse>>> GetAllAsync(
+  RegionGetAllQuery query
+)
+{
+  var currentUserId = _claimService.GetUserId();
+
+  if (string.IsNullOrWhiteSpace(currentUserId))
   {
-    Expression<Func<Region, bool>> predicate =
-      c =>
-      (
-        string.IsNullOrEmpty(query.Search)
+    return Result<IEnumerable<RegionResponse>>.Failure(
+      AuthErrors.Unauthorized
+    );
+  }
+
+  var currentUser =
+    await _unitOfWork.Users.GetFirstOrDefaultAsync(
+      predicate: user => user.Id == currentUserId
+    );
+
+  if (currentUser == null)
+  {
+    return Result<IEnumerable<RegionResponse>>.Failure(
+      UserErrors.NotFound
+    );
+  }
+
+  Expression<Func<Region, bool>> predicate =
+    region =>
+      string.IsNullOrEmpty(query.Search)
+      ||
+      region.Name.Contains(query.Search);
+
+  // ==========================================
+  // فلترة حسب حالة المنطقة
+  // ==========================================
+  if (query.IsActive.HasValue)
+  {
+    predicate =
+      predicate.And(
+        region => region.IsActive == query.IsActive.Value
       );
+  }
 
-    if (query.IsActive != null)
+  // ==========================================
+  // Manager / Employee
+  // يشاهدون مناطق مركزهم فقط
+  // ==========================================
+  if (
+    currentUser.Role == RoleEnum.Manager ||
+    currentUser.Role == RoleEnum.Employee
+  )
+  {
+    if (!currentUser.CenterId.HasValue)
     {
-      predicate = predicate.And(c => c.IsActive == query.IsActive);
+      return Result<IEnumerable<RegionResponse>>.Failure(
+        CentersErrors.NotFound
+      );
     }
 
-    if (query.CenterId != null)
+    var centerId = currentUser.CenterId.Value;
+
+    predicate =
+      predicate.And(
+        region => region.CenterId == centerId
+      );
+  }
+  else
+  {
+    // ==========================================
+    // Admin / Client
+    // يمكن تطبيق CenterId القادم من Query
+    // ==========================================
+    if (query.CenterId.HasValue)
     {
-      predicate = predicate.And(c => c.CenterId == query.CenterId);
+      predicate =
+        predicate.And(
+          region => region.CenterId == query.CenterId.Value
+        );
     }
+  }
 
-    var sortFunc = SortHelper.BuildSort<Region, RegionSortFieldEnum>(query.Sort);
+  var sortFunc =
+    SortHelper.BuildSort<Region, RegionSortFieldEnum>(
+      query.Sort
+    );
 
-    var pagedResult = await _unitOfWork.Regions.GetPagedAsync(
+  var pagedResult =
+    await _unitOfWork.Regions.GetPagedAsync(
       predicate: predicate,
       pageNumber: query.PageNumber,
       pageSize: query.PageSize,
       sort: sortFunc,
-      queryBuilder: o => o.Include(o => o.Center)
+      queryBuilder: regions => regions
+        .Include(region => region.Center)
     );
 
-    var data = _mapper.Map<IEnumerable<RegionResponse>>(pagedResult.Data);
+  var data =
+    _mapper.Map<IEnumerable<RegionResponse>>(
+      pagedResult.Data
+    );
 
-    var paging = new AppPaging
-    {
-      PageNumber = query.PageNumber,
-      PageSize = query.PageSize,
-      TotalRecords = pagedResult.TotalRecords
-    };
+  var paging = new AppPaging
+  {
+    PageNumber = query.PageNumber,
+    PageSize = query.PageSize,
+    TotalRecords = pagedResult.TotalRecords
+  };
 
-    return Result<IEnumerable<RegionResponse>>.Success(data, paging);
-  }
-  
+  return Result<IEnumerable<RegionResponse>>.Success(
+    data,
+    paging
+  );
+}  
 
   public async Task<Result<RegionResponse>> GetByIdAsync(int id)
   {

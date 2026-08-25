@@ -1,11 +1,11 @@
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.MediaFiles.Dto;
-using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.MediaFiles.Model;
 using LapisApi.Helpers.Extensions;
 using LapisApi.Helpers.Security;
 using Microsoft.EntityFrameworkCore;
+using SisApi.App.MediaFiles.Enums;
 using SisApi.App.MediaFiles.Interfaces;
 using SisApi.App.MediaFiles.Model;
 using SisApi.Data;

@@ -16,9 +16,15 @@ public class UserResponse
   
   public int? RegionId { get; set; }
   public RegionResponse?  Region { get; set; } = default!;
+  
+  public double? Lat { get; set; }
+  public double? Long { get; set; }
+
   public bool IsActive { get; set; }
   public DateTime CreatedAt { get; set; }
 
   public FileResponse? Image { get; set; }
+  
+  public decimal PointsBalance { get; set; } = 0; 
   
 }

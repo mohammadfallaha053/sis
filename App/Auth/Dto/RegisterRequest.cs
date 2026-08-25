@@ -17,6 +17,9 @@ namespace SisApi.App.Auth.Dto
     public string Password { get; set; } = string.Empty;
     [Required]
     public int RegionId { get; set; } 
+    
+    public double? Lat { get; set; } 
+    public double? Long { get; set; } 
 
     [Required]
     public string PhoneNumber { get; set; } = string.Empty;

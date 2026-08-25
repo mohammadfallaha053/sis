@@ -1,4 +1,4 @@
-﻿using LapisApi.App.MediaFiles.Enums;
+﻿using SisApi.App.MediaFiles.Enums;
 namespace SisApi.App.MediaFiles.Model
 {
   public class MediaFile

@@ -6,7 +6,9 @@ namespace SisApi.App.Users.Model
   {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-      
+      builder
+        .Property(user => user.PointsBalance)
+        .HasPrecision(18, 2);
     }
   }
 }

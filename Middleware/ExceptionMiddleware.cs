@@ -2,7 +2,7 @@ using JWT53.MyEnum;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
 using LapisApi.Shared;
-using LapisApi.Shared.Errors;
+using SisApi.Shared.Errors;
 
 public class ExceptionMiddleware
 {

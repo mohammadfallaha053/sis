@@ -1,5 +1,4 @@
 using AutoMapper;
-using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.Settings.Dto;
 using LapisApi.App.Settings.Dto.Commands;
 using LapisApi.App.Settings.Dto.Response;
@@ -9,6 +8,7 @@ using LapisApi.OptionConfigurations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using SisApi.App.Auth.Enums;
+using SisApi.App.MediaFiles.Enums;
 using SisApi.App.MediaFiles.Interfaces;
 using SisApi.Data.Interfaces;
 namespace SisApi.App.Settings.Services;

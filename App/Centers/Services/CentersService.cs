@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.MediaFiles.Dto;
-using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.Centers.Enums;
 using LapisApi.App.Users.Errors;
 using LapisApi.Helpers;
@@ -16,6 +15,7 @@ using SisApi.App.Centers.Dto.Response;
 using SisApi.App.Centers.Errors;
 using SisApi.App.Centers.Interfaces;
 using SisApi.App.Centers.Model;
+using SisApi.App.MediaFiles.Enums;
 using SisApi.App.MediaFiles.Interfaces;
 using SisApi.App.Users.Interfaces;
 using SisApi.App.Users.Model;

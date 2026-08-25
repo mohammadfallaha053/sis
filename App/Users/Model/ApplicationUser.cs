@@ -2,23 +2,51 @@
 using SisApi.App.Auth.Enums;
 using SisApi.App.Centers.Model;
 using SisApi.App.Regions.Model;
+
 namespace SisApi.App.Users.Model
 {
   public class ApplicationUser : IdentityUser
   {
     public required string FirstName { get; set; }
+
     public required string LastName { get; set; }
+
     public required DateTime CreatedAt { get; set; }
+
+    public required bool IsActive { get; set; } = true;
+
+    public required RoleEnum Role { get; set; }
+    
+
+
+
+    // ==========================================
+    // Manager / Employee
+    // ==========================================
+
+    // المركز الذي يتبع له الموظف أو المدير
     public int? CenterId { get; set; }
 
-    // المركز الذي يعمل فيه المستخدم
     public Center? Center { get; set; }
 
-    // المركز الذي يديره المستخدم
+    // يستخدم عندما يكون المستخدم مدير المركز
     public Center? ManagedCenter { get; set; }
-    public required bool IsActive { get; set; } = true;
-    public required RoleEnum Role { get; set; }
-    public int? RegionId { get; set; }  
-    public Region Region { get; set; }
+
+
+    // ==========================================
+    // Client
+    // ==========================================
+
+    // المنطقة التي اختارها العميل في البروفايل
+    public int? RegionId { get; set; }
+
+    public Region? Region { get; set; }
+
+    // الموقع الحالي المسجل في بروفايل العميل
+    public double? Lat { get; set; }
+
+    public double? Long { get; set; }
+    
+    public decimal PointsBalance { get; set; } = 0; 
   }
 }

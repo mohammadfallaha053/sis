@@ -1,5 +1,5 @@
 using LapisApi.App.MediaFiles.Dto;
-using LapisApi.App.MediaFiles.Enums;
+using SisApi.App.MediaFiles.Enums;
 namespace SisApi.App.MediaFiles.Interfaces;
 
 public interface IFileService

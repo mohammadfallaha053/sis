@@ -4,14 +4,12 @@ using LapisApi.App.Auth.Interfaces;
 using LapisApi.App.BackgroundJobs.Enums;
 using LapisApi.App.BackgroundJobs.Interfaces;
 using LapisApi.App.BackgroundJobs.Jobs.Payloads;
-using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.Users.Dto;
 using LapisApi.App.Users.Dto.Request.Commands;
 using LapisApi.App.Users.Enums;
 using LapisApi.App.Users.Errors;
 using LapisApi.Helpers;
 using LapisApi.Helpers.Responses;
-using LapisApi.Shared.Errors;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +17,7 @@ using SisApi.App.Auth.Enums;
 using SisApi.App.Centers.Dto.Response;
 using SisApi.App.Centers.Errors;
 using SisApi.App.Centers.Model;
+using SisApi.App.MediaFiles.Enums;
 using SisApi.App.MediaFiles.Interfaces;
 using SisApi.App.Regions.Dto.Response;
 using SisApi.App.Regions.Errors;
@@ -30,6 +29,7 @@ using SisApi.App.Users.Interfaces;
 using SisApi.App.Users.Model;
 using SisApi.Data;
 using SisApi.Data.Interfaces;
+using SisApi.Shared.Errors;
 using System.Linq.Expressions;
 namespace SisApi.App.Users.Services;
 
@@ -176,6 +176,8 @@ public class UserService : IUserService
     user.FirstName = request.FirstName;
     user.LastName = request.LastName;
     user.PhoneNumber = request.PhoneNumber;
+    user.Lat = request.Lat;
+    user.Long = request.Long;
 
     if (isClient)
     {
@@ -267,6 +269,9 @@ public class UserService : IUserService
         : _mapper.Map<RegionResponse>(user.Region),
 
       IsActive = user.IsActive,
+
+      Lat = user.Lat,
+      Long = user.Long,
 
       // يمنع الاستثناء إذا أعادت الخدمة null
       Image = mediaFiles?.FirstOrDefault()

@@ -7,9 +7,6 @@ public class RegionResponse
   public int Id { get; set; }
   public required string Name { get; set; }
   
-  public double Lat { get; set; }
-  public double Long { get; set; }
-
   public List<VisitInfo> Visits { get; set; }
   
   public int? CenterId { get; set; }

@@ -1,5 +1,5 @@
 using LapisApi.Helpers.Responses;
-namespace LapisApi.Shared.Errors;
+namespace SisApi.Shared.Errors;
 
 public static class SharedErrors
 {
@@ -29,5 +29,12 @@ public static class SharedErrors
     messageAr: "حدث خطأ غير معروف",
     messageEn: "An unknown error occurred",
     type: ErrorType.ServerError
+  );
+  
+  public static readonly Error ValidationFailed = new(
+    code: "SharedErrors.ValidationFailed",
+    messageAr: "فشل التحقق من البيانات",
+    messageEn: "Validation failed",
+    type: ErrorType.Validation
   );
 }

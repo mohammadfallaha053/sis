@@ -1,5 +1,4 @@
 using AutoMapper;
-using LapisApi.App.Regions.Dto;
 using SisApi.App.Regions.Dto.Request.Commands;
 using SisApi.App.Regions.Dto.Response;
 using SisApi.App.Regions.Model;

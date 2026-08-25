@@ -1,12 +1,10 @@
 ﻿using LapisApi.App.Auth.Dto;
 using LapisApi.App.Auth.Errors;
 using LapisApi.App.Auth.Interfaces;
-using LapisApi.App.MediaFiles.Enums;
 using LapisApi.App.Users.Errors;
 using LapisApi.Helpers.Security;
 using LapisApi.Interfaces.Auth;
 using LapisApi.OptionConfigurations;
-using LapisApi.Shared.Errors;
 using LapisApi.Shared.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +12,13 @@ using Microsoft.Extensions.Options;
 using SisApi.App.Auth.Dto;
 using SisApi.App.Auth.Enums;
 using SisApi.App.Centers.Errors;
+using SisApi.App.MediaFiles.Enums;
 using SisApi.App.MediaFiles.Interfaces;
 using SisApi.App.Regions.Errors;
 using SisApi.App.Users.Dto.Response;
 using SisApi.App.Users.Model;
 using SisApi.Data;
+using SisApi.Shared.Errors;
 using SisApi.Shared.Providers;
 using System.IdentityModel.Tokens.Jwt;
 namespace SisApi.App.Auth.Services;
@@ -94,7 +94,9 @@ public class AuthService : IAuthService
       PhoneNumber = model.PhoneNumber,
       IsActive = true,
       Role = RoleEnum.Client,
-      RegionId = model.RegionId
+      RegionId = model.RegionId,
+      Lat = model.Lat,
+      Long = model.Long,
     };
 
     var result = await _userManager.CreateAsync(user, model.Password);
@@ -119,6 +121,8 @@ public class AuthService : IAuthService
       PhoneNumber = user.PhoneNumber,
       CreatedAt = user.CreatedAt,
       RegionId = user.RegionId,
+      Lat = user.Lat,
+      Long = user.Long
     };
 
     return Result<ClientRegisterResponse>.Success(data);

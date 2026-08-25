@@ -1,9 +1,11 @@
-namespace LapisApi.App.MediaFiles.Enums;
+namespace SisApi.App.MediaFiles.Enums;
 
 public enum AttachmentEntityType
 {
   Center,
   Ads,
   User,
-  Transaction
+  ItemType,
+  Category,
+  Product
 }
