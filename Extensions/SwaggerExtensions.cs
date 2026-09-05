@@ -15,8 +15,8 @@ public static class SwaggerExtensions
         Title = "S I S API",
         Contact = new OpenApiContact
         {
-          Name = "Mohammad Fallaha  +963 956 661 418",
-          Email = "mohammadfallaha053@gmail.com",
+          Name = "ُEnass Fallaha  +963 940 053 146",
+          Email = "Enassfallaha053@gmail.com",
         },
       });
 

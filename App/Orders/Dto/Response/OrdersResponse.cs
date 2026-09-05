@@ -1,4 +1,5 @@
 ﻿using SisApi.App.Orders.Enums;
+using SisApi.App.Users.Dto.Response;
 
 namespace SisApi.App.Orders.Dto.Response;
 
@@ -12,6 +13,7 @@ public class OrdersResponse
   public string? CancellationReason { get; set; }
 
   public string ClientId { get; set; } = string.Empty;
+  public UserResponse Client { get; set; } = new UserResponse();
 
   public int RegionId { get; set; }
 

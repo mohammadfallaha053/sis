@@ -410,6 +410,7 @@ public async Task<Result<IEnumerable<OrdersResponse>>> GetAllAsync(
       queryBuilder: orders => orders
         .Include(order => order.OrderItems)
         .ThenInclude(orderItem => orderItem.ItemType)
+        .Include(order => order.Client)
     );
 
   var orders =
